@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>TOD</title>
+
+    <meta name="description" content="Quick application">
+    <meta name="author" content="Sylhare">
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+
+                <!-- Header -->
+                <div class="page-header">
+                    <h1>
+                        Truth or Dare <small>The famous game!</small>
+                    </h1>
+                </div>
+
+                <!-- Navigation Tabs -->
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <li class="active"><a data-toggle="tab" href="#game">Game</a></li>
+                    </li>
+                    <li><a data-toggle="tab" href="#rules">Rules</a></li>
+                    <li><a data-toggle="tab" href="#settings">Settings</a></li>
+                </ul>
+                </ul>
+
+                <div class="tab-content">
+                    <div id="game" class="tab-pane fade in active">
+                        <!-- Main text -->
+                        <div class="jumbotron">
+                            <h2>
+                                Are you ready?
+                            </h2>
+                            <p>
+                                Click on the button below to start the game
+                            </p>
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-sm-2  col-xs-4"><button class="btn btn-info btn-block btn-large" type="button" onclick="truth()">Truth</button>
+                                    </div>
+                                    <div class="col-sm-2 col-xs-4"><button class="btn btn-default btn-block btn-large" type="button" onclick="random()">Random</button>
+                                    </div>
+                                    <div class="col-sm-2 col-xs-4"><button class="btn btn-warning btn-block btn-large" type="button" onclick="dare()">Dare</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div id="rules" class="tab-pane fade">
+                        <h3>Rules</h3>
+                        <p>Some content in menu 1.</p>
+                    </div>
+                    <div id="Setting" class="tab-pane fade">
+                        <h3>Settings</h3>
+                        <p>Some content in menu 2.</p>
+                    </div>
+
+
+                    <!-- Footer -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            test
+                        </div>
+                        <div class="col-md-6">
+                            <!-- Progress Bar -->
+                            <div class="progress">
+                                <div class="progress-bar progress-success">
+                                </div>
+                            </div>
+                        </div>
+                    </div> <span class="label label-default">Label</span>
+                </div>
+            </div>
+        </div>
+
+        <script src="js/jquery.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/scripts.js"></script>
+</body>
+
+</html>
