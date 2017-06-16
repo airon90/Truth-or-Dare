@@ -1,0 +1,22 @@
+[[{
+    "Id": "1",
+    "level": "2",
+    "summary": "Stand up for 2 turns",
+    "time": "",
+    "turns": "2",
+    "type": "Dare"
+}, {
+    "Id": "2",
+    "level": "2",
+    "summary": "I dare you to do 10 pushups with one hand",
+    "time": "60",
+    "turns": "",
+    "type": "Dare"
+}, {
+    "Id": "3",
+    "level": "3",
+    "summary": "What actor/actress do you prefer?",
+    "time": "",
+    "turns": "",
+    "type": "Truth"
+}]]
