@@ -32,7 +32,7 @@ def main():
             for row in reader:
                 csv_input.append(row)
             with open('output.json', 'w+') as json_file:
-                json_output = json.dumps([ csv_input ], sort_keys=True)
+                json_output = json.dumps(csv_input, sort_keys=True)
                 json_file.write(json_output)
     
     except FileNotFoundError:
