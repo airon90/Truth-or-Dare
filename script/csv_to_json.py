@@ -1,19 +1,18 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import csv 
+import csv
 import json
 import sys
 
-def main():  
+def main():
     """
     Script that takes the file name "input.csv" and convert it into a .json
     file named output.json
-    The first row of the csv file is the field name, 
+    The first row of the csv file is the field name,
     the other rows are the values
 
     """
-    csv_input = []
     filepath = "input.csv"
     delim = ";"
 
@@ -21,22 +20,45 @@ def main():
         filepath = sys.argv[1]
         if len(sys.argv) > 2:
             delim = ";"
+
+    conversion(filepath, delim, "output.json")
+
+def conversion(path, delim, filename):
+    """
+    Convert the csv file from path into an output.json
+    delim is used to specify the delimiters of the csv file
+
+    """
+    csv_input = []
     
     try:
-        
-        #Conversion csv to json        
-        with open(filepath,"rt") as csv_file:
+        #Conversion csv to json
+        with open(path,"rt") as csv_file:
             reader = csv.reader(csv_file, delimiter=delim, quoting=csv.QUOTE_ALL)
             fieldnames = next(reader)
-            reader = csv.DictReader(csv_file, delimiter=';', fieldnames=fieldnames)
+            reader = csv.DictReader(csv_file, delimiter=delim, fieldnames=fieldnames)
             for row in reader:
                 csv_input.append(row)
-            with open('output.json', 'w+') as json_file:
-                json_output = json.dumps(csv_input, sort_keys=True)
-                json_file.write(json_output)
-    
+            to_json(filename, csv_input)
+
     except FileNotFoundError:
-        print(filepath +" was not found")
+        print(path +" was not found")
+
+
+def to_json(filename, csv_input):
+    """
+    Create a json file from a csv_input
+
+    """
+    if not filename.endswith(".json"):
+        if filename == "":
+            filename = "output"
+        filename += filename + ".json"
+
+    with open(filename, 'w+') as json_file:
+        json_output = json.dumps(csv_input, sort_keys=True)
+        json_file.write(json_output)
+
 
 if __name__ == '__main__':
     main()

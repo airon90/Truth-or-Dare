@@ -12,11 +12,4 @@
     "time": "60",
     "turns": "",
     "type": "Dare"
-}, {
-    "id": "2",
-    "level": "3",
-    "summary": "What actor/actress do you prefer?",
-    "time": "",
-    "turns": "",
-    "type": "Truth"
 }]
