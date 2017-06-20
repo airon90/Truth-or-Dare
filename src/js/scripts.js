@@ -1,10 +1,15 @@
-var USED_ID = [];
-var ID = [];
+var DARE_ID = [];
+var TRUTH_ID = [];
+var DARE = "Dare";
+var TRUTH = "Truth";
 var TURN = 0;
-var CHOICE = "Dare";
-var myJson;
+var CHOICE = "";
+var TRUTH_SOURCE = "../script/output.json";
+var DARE_SOURCE = "../script/output.json";
+
 
 function timer(milliseconds) {
+    /* Animate the bootstrap progress bar to reach 100% in a time in ms set */
     $(".progress-bar").animate({
         width: "100%"
     }, milliseconds);
@@ -12,13 +17,27 @@ function timer(milliseconds) {
 
 timer(2000);
 
-/* Truth or Dare functions */
+//Make sure global storage works
+window.onload = function () {
+    if (typeof (Storage) !== "undefined") {
+        // Code for localStorage/sessionStorage.
+        console.log("w Truth: " + TRUTH_ID + " Dare: " + DARE_ID);
+        loadJSON(TRUTH_SOURCE);
+    } else {
+        // Sorry! No Web Storage support..
+        alert("The app won’t work. Your browser does not support HTML5, please try with another one");
+    }
+}
+
+
+/**
+    Truth or Dare functions
+*/
 function truth() {
     'use strict';
-    CHOICE = "Truth";
-    console.log(localStorage.getItem("ID"));
-    getFromJSON("/script/output.json");
-    console.log(localStorage.getItem("ID"));
+    console.log("bt Truth: " + TRUTH_ID + " Dare: " + DARE_ID);
+    getFromJSON(TRUTH_SOURCE, TRUTH);
+    console.log("at Truth: " + TRUTH_ID + " Dare: " + DARE_ID);
 }
 
 function random() {
@@ -28,8 +47,84 @@ function random() {
 function dare() {
     'use strict';
     CHOICE = "Dare";
-    getFromJSON("/script/output.json");
-    console.log("id " + ID);
+    getFromJSON(DARE_SOURCE, DARE);
+}
+
+
+function indexing(json) {
+    /* To be called when loading the json to index truths and dares IDs */
+    var i;
+
+    for (i = 0; i < json.length; i++) {
+        console.log(json[i].type);
+        if (json[i].type === TRUTH) {
+            TRUTH_ID.push(json[i].id);
+        } else if (json[i].type === DARE) {
+            DARE_ID.push(json[i].id);
+        }
+    }
+}
+
+function setArrayLocal(name, array) {
+    /* Transform the array into text to save it in localStorage */
+    var text = array.toString();
+    localStorage.setItem(name, text);
+}
+
+function getArrayLocal(name) {
+    /* Take an a string in local storage and return the array parsed from it */
+    var text = localStorage.getItem(name);
+    return text.split(",");
+}
+
+function loadJSON(source) {
+    /* Get the JSON file and do the logic to get a truth or dare from the JSON file based on the choice */
+    $.getJSON(source, function (json) {
+        indexing(json);
+        console.log("Truth: " + TRUTH_ID + " Dare: " + DARE_ID);
+    });
+}
+
+
+function isValid(type, id) {
+    /* Check if the id is used and is the good type */
+    var validator = getIDsFromType(type);
+    
+    if (id in validator) {
+        return true;
+    }
+    return false
+}
+
+function getIDsFromType(type) {
+    var arrayIDs = null;
+    if (type === DARE) {
+        arrayIDs = DARE_ID;
+    } else if (type === TRUTH) {
+        arrayIDs = TRUTH_ID;
+    }
+
+    return arrayIDs;
+}
+
+function setIDsfromType(type, arrayIDs) {
+    if (type === DARE) {
+        DARE_ID = arrayIDs;
+    } else if (type === TRUTH) {
+        TRUTH_ID = arrayIDs;
+    }
+
+}
+
+function setUsedID(type, id) {
+    var arrayIDs = getIDsFromType(type);
+    var index = arrayIDs.indexOf(id);
+
+    if (index > -1) {
+        array.splice(index, 1);
+    }
+
+    setIDsfromType(type, arrayIDs);
 }
 
 
@@ -45,44 +140,12 @@ function dare() {
 
 */
 
-
-//Load JSON with JQuery
-$.getJSON("/script/output.json", function (json) {
-    $("#type-action").text(json[0].type + ": ");
-    $("#text-action").text(json[0].summary);
-    localStorage.setItem("ID", json[0].id);
-    console.log(localStorage.getItem("ID"));
-
-});
-
-localStorage.setItem("ID", "test");
-console.log(localStorage.getItem("ID"));
-
-//Make sure global storage works
-
-if (typeof (Storage) !== "undefined") {
-    // Code for localStorage/sessionStorage.
-} else {
-    // Sorry! No Web Storage support..
-    alert("The app won’t work. Your browser does not support HTML5, please try with another one");
-}
-
-function myFunction() {
-    var str = "0,1,2,3,4,5,6";
-    var res = str.split(",");
-    var test = res.toString();
-    document.getElementById("demo").innerHTML = res[2] + " " + "'" + test + "'";
-}
-
-
-
-function getFromJSON(source) {
+function getFromJSON(source, choice) {
+    /* Get the JSON file and do the logic to get a truth or dare from the JSON file based on the choice */
     $.getJSON(source, function (json) {
-
         var c = -1;
 
-        ID.push(1);
-        $("#type-action").text(CHOICE + ": ");
+        $("#type-action").text(choice + ": ");
         c = randomChoice(json);
 
         if (c > 0) {
@@ -95,6 +158,8 @@ function getFromJSON(source) {
         console.log(localStorage.getItem("ID"));
     });
 }
+
+
 
 
 function randomChoice(jsonObj) {
@@ -112,19 +177,11 @@ function randomChoice(jsonObj) {
     return id;
 }
 
-function generateID(json) {
-    ID = Array.from(Array(json.length).keys());
-    ID = ID.filter(function (x) {
-        return USED_ID.indexOf(x) < 0
-    })
-}
-
 function getRandomID(jsonObj) {
     var randomID = -1;
     var temp = 0;
-    generateID(jsonObj);
 
-    if (ID.length > 0) {
+    /*if (ID.length > 0) {
         while (!(randomID in ID)) {
             temp++;
             if (temp > 10) {
@@ -133,6 +190,15 @@ function getRandomID(jsonObj) {
             randomID = ID[Math.floor(Math.random() * ID.length)];
         };
         USED_ID.push(randomID);
-    }
+    }*/
     return randomID;
+}
+
+
+function generateID(json) {
+    /* Depreciated */
+    ID = Array.from(Array(json.length).keys()); //create a table full from 0 to json length
+    ID = ID.filter(function (x) {
+            return USED_ID.indexOf(x) < 0
+        }) //remove IDs
 }
