@@ -30,7 +30,7 @@ def conversion(path, delim, filename):
 
     """
     csv_input = []
-    
+
     try:
         #Conversion csv to json
         with open(path,"rt") as csv_file:

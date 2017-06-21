@@ -7,6 +7,7 @@ var DARE_SOURCE = "../script/output.json";
 var SOURCE = "../script/outpput.json"; //with both truth and dare
 var turn = "1";
 var idAvailable = [];
+var BOOTSTRAP_STYLE = ["Default", "Primary", "Success", "Info", "Warning", "Danger"];
 
 function timer(milliseconds) {
     /* Animate the bootstrap progress bar to reach 100% in a time in ms set */
@@ -34,7 +35,6 @@ function random() {
 function dare() {
     /* load a dare from tje json file */
     'use strict';
-    CHOICE = "Dare";
     getFromJSON(DARE_SOURCE, DARE);
 }
 
@@ -87,7 +87,6 @@ window.onload = function () {
         })
 }
 
-
 function isValid(type, id) {
     /* Check if the id is available and is the good type */
     var validator = getIDsFromType(type);
@@ -121,13 +120,39 @@ function removeID(id) {
 }
 
 
-function isBootStrapStyle(style) {
+/**
+ 
+  To update the view
+ 
+*/
+function bsStyliser(style) {
     if (style in BOOTSTRAP_STYLE) {
-        return true;
+        return style;
     } else {
-        return false;
+        return "default";
     }
 }
+
+function addAlert(style, title, message) {
+    /* Create an alert with a bootStrapType for the style, a title and a message */
+
+    $('#alert_placeholder').html('<div class="alert alert-' + bsStyliser(style) + '"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>' + title + '</strong>' + message + '</div>');
+ 
+}
+ 
+function addLabel(style, name) {
+    /* This will add labels in the view the bootStrapType is to make the CSS  */
+ 
+    $("#labels").append('<span class="label label-' + bsStrapStyliser(style) + '">' + name + '/span>');
+ 
+}
+ 
+function nextTurn() {
+    turn ++;
+    $("#turn").text(turn);
+}
+ 
+nextTurn();
 
 function getFromJSON(source, choice) {
     /* Get the JSON file and do the logic to get a truth or dare from the JSON file based on the choice */
