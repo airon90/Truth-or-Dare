@@ -1,7 +1,21 @@
-    [{
+[{
     "id": "2",
-    "level": "3",
+    "level": "2",
     "summary": "What actor/actress do you prefer?",
+    "time": "",
+    "turns": "",
+    "type": "Truth"
+}, {
+    "id": "3",
+    "level": "3",
+    "summary": "What is your secret crush?",
+    "time": "",
+    "turns": "",
+    "type": "Truth"
+}, {
+    "id": "4",
+    "level": "0",
+    "summary": "What is the most disgusting thing you did",
     "time": "",
     "turns": "",
     "type": "Truth"

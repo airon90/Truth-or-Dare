@@ -12,9 +12,13 @@
     padding-top: 3px
 }
 
+.badge-warning {
+    background-color: #f0ad4e
+}
+
 .progress.active .progress-bar {
-    -webkit-transition: none !important;
-    transition: none !important;
+    -webkit-transition: none;
+    transition: none;
 }
 
 .progress {

@@ -1,4 +1,7 @@
 id;type;level;summary;time;turns
 0;Dare;2;Stand up for 2 turns;;2
 1;Dare;2;I dare you to do 10 pushups with one hand;60;
-2;Truth;3;What actor/actress do you prefer?;;
+2;Truth;2;What actor/actress do you prefer?;;
+3;Truth;3;What is your secret crush?;;
+4;Truth;0;What is the most disgusting thing you did;;
+5;Dare;2;I dare you to do a headstand for 2 mins;120;

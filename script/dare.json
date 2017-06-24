@@ -12,4 +12,11 @@
     "time": "60",
     "turns": "",
     "type": "Dare"
+}, {
+    "id": "5",
+    "level": "2",
+    "summary": "I dare you to do a headstand for 2 mins",
+    "time": "120",
+    "turns": "",
+    "type": "Dare"
 }]

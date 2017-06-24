@@ -2,21 +2,27 @@ var DARE_ID = [];
 var TRUTH_ID = [];
 var DARE = "Dare";
 var TRUTH = "Truth";
-var TRUTH_SOURCE = "../script/output.json";
-var DARE_SOURCE = "../script/output.json";
-var SOURCE = "../script/outpput.json"; //with both truth and dare
+var SOURCE = "../script/output.json"; //with both truth and dare
 var turn = "1";
+var test;
 var idAvailable = [];
 var BOOTSTRAP_STYLE = ["Default", "Primary", "Success", "Info", "Warning", "Danger"];
 
-function timer(milliseconds) {
+function timer(seconds) {
+    'use strict';
     /* Animate the bootstrap progress bar to reach 100% in a time in ms set */
+    var milliseconds = seconds * 1000;
+
+    $(".progress-bar").stop();
+    $(".progress-bar").animate({
+        width: "0%"
+    }, 100);
     $(".progress-bar").animate({
         width: "100%"
     }, milliseconds);
 }
 
-timer(2000);
+timer(10);
 
 
 /**
@@ -25,7 +31,7 @@ timer(2000);
 function truth() {
     /* Load a truth from the json file */
     'use strict';
-    getFromJSON(TRUTH_SOURCE, TRUTH);
+    generate(TRUTH_ID, TRUTH);
 }
 
 function random() {
@@ -35,9 +41,8 @@ function random() {
 function dare() {
     /* load a dare from tje json file */
     'use strict';
-    getFromJSON(DARE_SOURCE, DARE);
+    generate(DARE_ID, DARE);
 }
-
 
 /** 
     The JSON file for the truth or dare should be like:
@@ -56,14 +61,16 @@ function indexing(json) {
 
     for (i = 0; i < json.length; i++) {
         console.log(json[i].type);
+
         if (json[i].type === TRUTH) {
             TRUTH_ID.push(json[i].id);
         } else if (json[i].type === DARE) {
             DARE_ID.push(json[i].id);
         }
     }
-    
+
     idAvailable = TRUTH_ID.concat(DARE_ID);
+    console.log(idAvailable);
 }
 
 
@@ -82,41 +89,56 @@ window.onload = function () {
         .done(function () {
             loadJSON(SOURCE)
         }).fail(function () {
-            loadJSON(TRUTH_SOURCE);
-            loadJSON(DARE_SOURCE);
+            alert("The file couldn't be loaded")
         })
-}
-
-function isValid(type, id) {
-    /* Check if the id is available and is the good type */
-    var validator = getIDsFromType(type);
-
-    if (id in validator) && (id in idAvailable) {
-        return true;
-    }
-    return false
-}
-
-function getIDsFromType(type) {
-    /* Get the dare ID or the Truth ID table */
-    var idType;
-    
-    if (type === DARE) {
-        idType = DARE_ID;
-    } else if (type === TRUTH) {
-        idType = TRUTH_ID;
-    }
-
-    return idType;
 }
 
 function removeID(id) {
     /* Remove an id used from the available id*/
     var index = idAvailable.indexOf(id);
+    console.log(id + " " + index + " removed!");
 
     if (index > -1) {
         idAvailable.splice(index, 1);
+
     }
+}
+
+
+function generate(array, type) {
+    var possibilities = getPossibilities(array);
+    var randomID = getRandomID(possibilities);
+
+    updateView(randomID, type);
+}
+
+function getPossibilities(array) {
+    var i, item;
+    var result = [];
+
+    for (i = 0; i < array.length; i++) {
+        item = array[i];
+        for (var j = 0; j < idAvailable.length; j++) {
+            if (item == idAvailable[j]) {
+                result.push(item);
+            }
+        }
+    }
+
+    return result;
+}
+
+function getRandomID(array) {
+    var id = -1;
+    var randomIndex;
+
+    if (array.length > 0) {
+        randomIndex = Math.floor(Math.random() * array.length);
+        id = array[randomIndex];
+        removeID(id);
+    }
+
+    return id;
 }
 
 
@@ -126,10 +148,10 @@ function removeID(id) {
  
 */
 function bsStyliser(style) {
-    if (style in BOOTSTRAP_STYLE) {
+    if ($.inArray(style, BOOTSTRAP_STYLE)) {
         return style;
     } else {
-        return "default";
+        return "Default";
     }
 }
 
@@ -137,77 +159,56 @@ function addAlert(style, title, message) {
     /* Create an alert with a bootStrapType for the style, a title and a message */
 
     $('#alert_placeholder').html('<div class="alert alert-' + bsStyliser(style) + '"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>' + title + '</strong>' + message + '</div>');
- 
+
 }
- 
+
+function clearLabel() {
+    /* Remove the label from the label section */
+
+    $("#labels").html("");
+
+}
+
 function addLabel(style, name) {
     /* This will add labels in the view the bootStrapType is to make the CSS  */
- 
-    $("#labels").append('<span class="label label-' + bsStrapStyliser(style) + '">' + name + '/span>');
- 
+
+    $("#labels").append('<span class="label label-' + style + '">' + name + '</span></br>');
+
 }
- 
+
 function nextTurn() {
-    turn ++;
+    turn++;
     $("#turn").text(turn);
 }
- 
-nextTurn();
 
-function getFromJSON(source, choice) {
-    /* Get the JSON file and do the logic to get a truth or dare from the JSON file based on the choice */
-    $.getJSON(source, function (json) {
-        var c = -1;
+function updateView(id, type) {
+    clearLabel();
+    $.getJSON(SOURCE, function (json) {
 
-        $("#type-action").text(choice + ": ");
-        c = randomChoice(json);
+        $("#type-action").text(type + ": ");
+        addLabel("info", type);
 
-        if (c > 0) {
-            $("#text-action").text(json[c].summary);
+        if (id >= 0) {
+            updateLabels(json[id]);
+
+            $("#text-action").text(json[id].summary);
+
         } else {
-            $("#text-action").text("You've completed all the " + CHOICE);
+            $("#text-action").text("You've completed all the " + type);
         }
     });
+
+    nextTurn();
 }
 
+function updateLabels(object) {
+    console.log(object);
+    if (object['time'] != '') {
+        addLabel("default", "timer");
+        timer(object['time']);
 
-function randomChoice(jsonObj) {
-    var id = getRandomID(jsonObj);
-    console.log("random - " + id);
-
-    /*for (var i = 0; i < jsonObj.length; i++) {
-        console.log("[i] - " + jsonObj[i].id)
-        if (jsonObj[i].id == id) {
-            
-            break;
-        }
-    }*/
-
-    return id;
+    }
+    if (object['turns'] != '') {
+        addLabel("default", "turns");
+    }
 }
-
-function getRandomID(jsonObj) {
-    var randomID = -1;
-    var temp = 0;
-
-    /*if (ID.length > 0) {
-        while (!(randomID in ID)) {
-            temp++;
-            if (temp > 10) {
-                break;
-            }
-            randomID = ID[Math.floor(Math.random() * ID.length)];
-        };
-        USED_ID.push(randomID);
-    }*/
-    return randomID;
-}
-
-/* SHOULD NOT BE NEEDED
-function generateID(json){
-    ID = Array.from(Array(json.length).keys()); //create a table full from 0 to json length
-    ID = ID.filter(function (x) {
-        return USED_ID.indexOf(x) < 0
-    }) //remove IDs
-}
-*/
