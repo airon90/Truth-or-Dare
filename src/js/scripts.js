@@ -4,25 +4,7 @@ var DARE = "Dare";
 var TRUTH = "Truth";
 var SOURCE = "../script/output.json"; //with both truth and dare
 var turn = "1";
-var test;
 var idAvailable = [];
-var BOOTSTRAP_STYLE = ["Default", "Primary", "Success", "Info", "Warning", "Danger"];
-
-function timer(seconds) {
-    'use strict';
-    /* Animate the bootstrap progress bar to reach 100% in a time in ms set */
-    var milliseconds = seconds * 1000;
-
-    $(".progress-bar").stop();
-    $(".progress-bar").animate({
-        width: "0%"
-    }, 100);
-    $(".progress-bar").animate({
-        width: "100%"
-    }, milliseconds);
-}
-
-timer(10);
 
 
 /**
@@ -60,7 +42,6 @@ function indexing(json) {
     var i;
 
     for (i = 0; i < json.length; i++) {
-        console.log(json[i].type);
 
         if (json[i].type === TRUTH) {
             TRUTH_ID.push(json[i].id);
@@ -70,7 +51,6 @@ function indexing(json) {
     }
 
     idAvailable = TRUTH_ID.concat(DARE_ID);
-    console.log(idAvailable);
 }
 
 
@@ -78,7 +58,6 @@ function loadJSON(source) {
     /* Get the JSON file and do the logic to get a truth or dare from the JSON file based on the choice */
     $.getJSON(source, function (json) {
         indexing(json);
-        console.log("Truth: " + TRUTH_ID + " Dare: " + DARE_ID);
     });
 }
 
@@ -96,7 +75,6 @@ window.onload = function () {
 function removeID(id) {
     /* Remove an id used from the available id*/
     var index = idAvailable.indexOf(id);
-    console.log(id + " " + index + " removed!");
 
     if (index > -1) {
         idAvailable.splice(index, 1);
@@ -147,18 +125,26 @@ function getRandomID(array) {
   To update the view
  
 */
-function bsStyliser(style) {
-    if ($.inArray(style, BOOTSTRAP_STYLE)) {
-        return style;
-    } else {
-        return "Default";
-    }
+function timer(seconds) {
+    'use strict';
+    /* Animate the bootstrap progress bar to reach 100% in a time in ms set */
+    var milliseconds = seconds * 1000;
+
+    $(".progress-bar").stop();
+    $(".progress-bar").animate({
+        width: "0%"
+    }, 100);
+    $(".progress-bar").animate({
+        width: "100%"
+    }, milliseconds);
 }
+
+timer(10);
 
 function addAlert(style, title, message) {
     /* Create an alert with a bootStrapType for the style, a title and a message */
 
-    $('#alert_placeholder').html('<div class="alert alert-' + bsStyliser(style) + '"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>' + title + '</strong>' + message + '</div>');
+    $('#alert_placeholder').html('<div class="alert alert-' + style + '"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>' + title + '</strong>' + message + '</div>');
 
 }
 
@@ -175,6 +161,16 @@ function addLabel(style, name) {
     $("#labels").append('<span class="label label-' + style + '">' + name + '</span></br>');
 
 }
+
+function updateLabels(object) {
+    if (object['time'] != '') {
+        addLabel("default", "timer");
+        timer(object['time']);
+
+    }
+    if (object['turns'] != '') {
+        addLabel("default", "turns");
+    }
 
 function nextTurn() {
     turn++;
@@ -200,15 +196,4 @@ function updateView(id, type) {
 
     nextTurn();
 }
-
-function updateLabels(object) {
-    console.log(object);
-    if (object['time'] != '') {
-        addLabel("default", "timer");
-        timer(object['time']);
-
-    }
-    if (object['turns'] != '') {
-        addLabel("default", "turns");
-    }
 }

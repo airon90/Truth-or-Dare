@@ -1,4 +1,4 @@
-#type-action{
+#type-action {
     font-weight: bold;
 }
 
@@ -111,7 +111,7 @@
 }
 
 .center-block {
-   margin-left:auto;
-   margin-right:auto;
-   display:block;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
 }
