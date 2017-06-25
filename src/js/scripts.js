@@ -120,6 +120,15 @@ function getRandomID(array) {
 }
 
 
+function statGame() {
+    var original = [
+        [40, 40, 20, 0],
+        [35, 40, 20, 5],
+        [10, 25, 40, 25],
+        [0, 10, 30, 60]
+    ];
+}
+
 /**
  
   To update the view
@@ -172,28 +181,50 @@ function updateLabels(object) {
         addLabel("default", "turns");
     }
 
-function nextTurn() {
-    turn++;
-    $("#turn").text(turn);
+    function nextTurn() {
+        turn++;
+        $("#turn").text(turn);
+    }
+
+    function updateView(id, type) {
+        clearLabel();
+        $.getJSON(SOURCE, function (json) {
+
+            $("#type-action").text(type + ": ");
+            addLabel("info", type);
+
+            if (id >= 0) {
+                updateLabels(json[id]);
+
+                $("#text-action").text(json[id].summary);
+
+            } else {
+                $("#text-action").text("You've completed all the " + type);
+            }
+        });
+
+        nextTurn();
+    }
 }
 
-function updateView(id, type) {
-    clearLabel();
-    $.getJSON(SOURCE, function (json) {
+/**
 
-        $("#type-action").text(type + ": ");
-        addLabel("info", type);
+    Event handler
 
-        if (id >= 0) {
-            updateLabels(json[id]);
-
-            $("#text-action").text(json[id].summary);
-
+*/
+$(document).ready(function () {
+    $("#check0").change(function () {
+        // this will contain a reference to the checkbox   
+        if (this.checked) {
+            alert("yeah");
         } else {
-            $("#text-action").text("You've completed all the " + type);
+            alert("oh");
         }
     });
-
-    nextTurn();
-}
-}
+    $("#radio1").change(function () {
+        // this will contain a reference to the radiobox   
+        if (this.checked) {
+            alert("yeah");
+        }
+    });
+});
