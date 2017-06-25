@@ -207,12 +207,14 @@ function updateLabels(object) {
     }
 }
 
+
 /**
 
     Event handler
 
 */
 $(document).ready(function () {
+    
     $("#check0").change(function () {
         // this will contain a reference to the checkbox   
         if (this.checked) {
@@ -221,6 +223,7 @@ $(document).ready(function () {
             alert("oh");
         }
     });
+    
     $("#radio1").change(function () {
         // this will contain a reference to the radiobox   
         if (this.checked) {
