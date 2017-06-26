@@ -5,25 +5,87 @@ var TRUTH = "Truth";
 var SOURCE = "../script/output.json"; //with both truth and dare
 var turn = "1";
 var idAvailable = [];
-
+var index = [[], [], [], [], [], []];
 
 /**
-    Truth or Dare functions
+ 
+  To update the view
+ 
 */
-function truth() {
-    /* Load a truth from the json file */
+function timer(seconds) {
     'use strict';
-    generate(TRUTH_ID, TRUTH);
+    /* Animate the bootstrap progress bar to reach 100% in a time in ms set */
+    var milliseconds = seconds * 1000;
+
+    $(".progress-bar").stop();
+    $(".progress-bar").animate({
+        width: "0%"
+    }, 100);
+    $(".progress-bar").animate({
+        width: "100%"
+    }, milliseconds);
 }
 
-function random() {
-    'use strict';
+timer(10);
+
+function addAlert(style, title, message) {
+    /* Create an alert with a bootStrapType for the style, a title and a message */
+
+    $("#alert_placeholder").html("<div class='alert alert-" + style + "'><button type='button' class='close' data-dismiss='alert'>&times;</button><strong>" + title + "</strong>" + message + "</div>");
+
 }
 
-function dare() {
-    /* load a dare from tje json file */
-    'use strict';
-    generate(DARE_ID, DARE);
+function clearLabel() {
+    /* Remove the label from the label section */
+
+    $("#labels").html("");
+
+}
+
+function addLabel(style, name) {
+    /* This will add labels in the view the bootStrapType is to make the CSS  */
+
+    $("#labels").append("<span class='label label-" + style + "'>" + name + "</span></br>");
+
+}
+
+function updateLabels(object) {
+    if (object["time"] != "") {
+        addLabel("default", "timer");
+        timer(object['time']);
+
+    }
+    if (object["turns"] != "") {
+        addLabel("default", "turns");
+    }
+}
+
+function nextTurn() {
+    turn++;
+    $("#turn").text(turn);
+}
+
+
+function updateView(id, type) {
+    clearLabel();
+    addLabel("info", type);
+
+    $.getJSON(SOURCE, function (json) {
+        var item = json[id];
+
+        if (id >= 0) {
+            $("#type-action").text(item.type + ": ");
+            updateLabels(item);
+
+
+            $("#text-action").text(item.summary);
+
+        } else {
+            $("#text-action").text("You've completed all the " + type);
+        }
+    });
+
+    nextTurn();
 }
 
 /** 
@@ -39,18 +101,20 @@ function dare() {
 
 function indexing(json) {
     /* To be called when loading the json to index truths and dares IDs */
-    var i;
+    var i, item;
 
     for (i = 0; i < json.length; i++) {
-
-        if (json[i].type === TRUTH) {
-            TRUTH_ID.push(json[i].id);
-        } else if (json[i].type === DARE) {
-            DARE_ID.push(json[i].id);
+        item = json[i];
+        index[item.level].push(item.id);
+        if (item.type === TRUTH) {
+            TRUTH_ID.push(item.id);
+        } else if (item.type === DARE) {
+            DARE_ID.push(item.id);
         }
     }
 
     idAvailable = TRUTH_ID.concat(DARE_ID);
+    console.log(index);
 }
 
 
@@ -66,11 +130,11 @@ window.onload = function () {
     /* to load the json and do the indexing when the window is loading */
     $.get(SOURCE)
         .done(function () {
-            loadJSON(SOURCE)
+            loadJSON(SOURCE);
         }).fail(function () {
-            alert("The file couldn't be loaded")
-        })
-}
+            alert("The file couldn't be loaded");
+        });
+};
 
 function removeID(id) {
     /* Remove an id used from the available id*/
@@ -97,7 +161,7 @@ function getPossibilities(array) {
     for (i = 0; i < array.length; i++) {
         item = array[i];
         for (var j = 0; j < idAvailable.length; j++) {
-            if (item == idAvailable[j]) {
+            if (item === idAvailable[j]) {
                 result.push(item);
             }
         }
@@ -129,82 +193,25 @@ function statGame() {
     ];
 }
 
+
 /**
- 
-  To update the view
- 
+    Truth or Dare functions
 */
-function timer(seconds) {
-    'use strict';
-    /* Animate the bootstrap progress bar to reach 100% in a time in ms set */
-    var milliseconds = seconds * 1000;
-
-    $(".progress-bar").stop();
-    $(".progress-bar").animate({
-        width: "0%"
-    }, 100);
-    $(".progress-bar").animate({
-        width: "100%"
-    }, milliseconds);
+function truth() {
+    /* Load a truth from the json file */
+    "use strict";
+    generate(TRUTH_ID, TRUTH);
 }
 
-timer(10);
-
-function addAlert(style, title, message) {
-    /* Create an alert with a bootStrapType for the style, a title and a message */
-
-    $('#alert_placeholder').html('<div class="alert alert-' + style + '"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>' + title + '</strong>' + message + '</div>');
-
+function random() {
+    "use strict";
+    generate(idAvailable, "Random");
 }
 
-function clearLabel() {
-    /* Remove the label from the label section */
-
-    $("#labels").html("");
-
-}
-
-function addLabel(style, name) {
-    /* This will add labels in the view the bootStrapType is to make the CSS  */
-
-    $("#labels").append('<span class="label label-' + style + '">' + name + '</span></br>');
-
-}
-
-function updateLabels(object) {
-    if (object['time'] != '') {
-        addLabel("default", "timer");
-        timer(object['time']);
-
-    }
-    if (object['turns'] != '') {
-        addLabel("default", "turns");
-    }
-
-    function nextTurn() {
-        turn++;
-        $("#turn").text(turn);
-    }
-
-    function updateView(id, type) {
-        clearLabel();
-        $.getJSON(SOURCE, function (json) {
-
-            $("#type-action").text(type + ": ");
-            addLabel("info", type);
-
-            if (id >= 0) {
-                updateLabels(json[id]);
-
-                $("#text-action").text(json[id].summary);
-
-            } else {
-                $("#text-action").text("You've completed all the " + type);
-            }
-        });
-
-        nextTurn();
-    }
+function dare() {
+    /* load a dare from tje json file */
+    "use strict";
+    generate(DARE_ID, DARE);
 }
 
 
@@ -214,7 +221,7 @@ function updateLabels(object) {
 
 */
 $(document).ready(function () {
-    
+
     $("#check0").change(function () {
         // this will contain a reference to the checkbox   
         if (this.checked) {
@@ -223,7 +230,7 @@ $(document).ready(function () {
             alert("oh");
         }
     });
-    
+
     $("#radio1").change(function () {
         // this will contain a reference to the radiobox   
         if (this.checked) {
