@@ -88,6 +88,13 @@ function updateView(id, type) {
     nextTurn();
 }
 
+function goCustom() {
+    /* To be generated when clicking on a checkbox to pass it in custom mode */
+
+    $('.funkyradio').find('label').removeClass('active').end().find('[type="radio"]').prop('checked', false);
+    $("#radio4").prop("checked", true);
+}
+
 /** 
     The JSON file for the truth or dare should be like:
         id - The unique id of the truth or dare
@@ -98,6 +105,13 @@ function updateView(id, type) {
         turns - The number of turn the dare stays
 
 */
+function loadJSON(source) {
+    /* Get the JSON file and do the logic to get a truth or dare from the JSON file based on the choice */
+    $.getJSON(source, function (json) {
+        indexing(json);
+    });
+}
+
 
 function indexing(json) {
     /* To be called when loading the json to index truths and dares IDs */
@@ -114,40 +128,48 @@ function indexing(json) {
     }
 
     idAvailable = TRUTH_ID.concat(DARE_ID);
-    console.log(index);
+    console.log("index " + index + " idAvailable " + idAvailable);
 }
-
-
-function loadJSON(source) {
-    /* Get the JSON file and do the logic to get a truth or dare from the JSON file based on the choice */
-    $.getJSON(source, function (json) {
-        indexing(json);
-    });
-}
-
-
-window.onload = function () {
-    /* to load the json and do the indexing when the window is loading */
-    $.get(SOURCE)
-        .done(function () {
-            loadJSON(SOURCE);
-        }).fail(function () {
-            alert("The file couldn't be loaded");
-        });
-};
 
 function removeID(id) {
     /* Remove an id used from the available id*/
-    var index = idAvailable.indexOf(id);
+    var i;
+    var findex = idAvailable.indexOf(id);
 
-    if (index > -1) {
-        idAvailable.splice(index, 1);
+    //Remove the id from the availables
+    if (findex > -1) {
+        idAvailable.splice(findex, 1);
+    }
 
+    //Remove the id from the index (all possible)
+    for (i = 0; i < index.length; i++) {
+        findex = index[i].indexOf(id);
+        if (findex > -1) {
+            index[i].splice(findex, 1);
+            break;
+        }
     }
 }
 
+function generate() {
+    /* The checkbox are in the same order (0 to 5) as the level (0 to 5), so it checks if the checkbox are checked and store it in a array
+       Then, it concats all of the selected level's question from index into one board in idAvailable */
+    var clickedIndex = [];
+    var checkID = "";
+    for (var i = 0; i <= 5; i++){
+        checkID = "#check"+i;
+        if ($(checkID).prop('checked')) {
+            clickedIndex.push(i);
+        }
+    }
+    
+    for (i = 0; i < clickedIndex.length; i++){
+        idAvailable.concat(index[clickedIndex[i]]);
+    }
+    
+}
 
-function generate(array, type) {
+function choose(array, type) {
     var possibilities = getPossibilities(array);
     var randomID = getRandomID(possibilities);
 
@@ -200,18 +222,18 @@ function statGame() {
 function truth() {
     /* Load a truth from the json file */
     "use strict";
-    generate(TRUTH_ID, TRUTH);
+    choose(TRUTH_ID, TRUTH);
 }
 
 function random() {
     "use strict";
-    generate(idAvailable, "Random");
+    choose(idAvailable, "Random");
 }
 
 function dare() {
     /* load a dare from tje json file */
     "use strict";
-    generate(DARE_ID, DARE);
+    choose(DARE_ID, DARE);
 }
 
 
@@ -220,18 +242,26 @@ function dare() {
     Event handler
 
 */
-$(document).ready(function () {
+window.onload = function () {
+    /* to load the json and do the indexing when the window is loading */
+    $.get(SOURCE)
+        .done(function () {
+            loadJSON(SOURCE);
+        }).fail(function () {
+            alert("The file couldn't be loaded");
+        });
+};
 
+$(document).ready(function () {
     $("#check0").change(function () {
         // this will contain a reference to the checkbox   
         if (this.checked) {
-            alert("yeah");
-        } else {
-            alert("oh");
-        }
+            goCustom();
+            generate();
+        } else {}
     });
 
-    $("#radio1").change(function () {
+    $("#soft").change(function () {
         // this will contain a reference to the radiobox   
         if (this.checked) {
             alert("yeah");
