@@ -1,0 +1,19 @@
+CACHE MANIFEST
+
+CACHE:
+# index.html is cached by default anyway -- this is just to be explicit
+index.html 
+../css/bootstrap.min.css
+../css/bootstrap-theme.min.css
+../css/style.css
+../js/bootstrap.min.js
+../js/jquery.min.js
+../js/script.js
+../favicon.ico
+
+# Fallback, so all pages put here will be displayed if the user is offline instead
+#FALLBACK:
+
+# Resources that require the user to be online
+NETWORK:
+*

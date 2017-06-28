@@ -50,12 +50,12 @@ function addLabel(style, name) {
 }
 
 function updateLabels(object) {
-    if (object["time"] != "") {
+    if (object["time"] !== "") {
         addLabel("default", "timer");
         timer(object['time']);
 
     }
-    if (object["turns"] != "") {
+    if (object["turns"] !== "") {
         addLabel("default", "turns");
     }
 }
@@ -88,11 +88,25 @@ function updateView(id, type) {
     nextTurn();
 }
 
-function goCustom() {
-    /* To be generated when clicking on a checkbox to pass it in custom mode */
+function checkCheckBox(id) {
+    var realID = "#" + id;
+    $(realID).prop("checked", true);
+}
 
-    $('.funkyradio').find('label').removeClass('active').end().find('[type="radio"]').prop('checked', false);
-    $("#radio4").prop("checked", true);
+function matchRadioMode(id) {
+    switch (id) {
+        case "original":
+             $(".checkbox").prop("checked", true);
+            break;
+        case "soft":
+            //code block
+            break;
+        case "sexy":
+            //code block
+            break;
+        default:
+            //code block
+    }
 }
 
 /** 
@@ -128,7 +142,6 @@ function indexing(json) {
     }
 
     idAvailable = TRUTH_ID.concat(DARE_ID);
-    console.log("index " + index + " idAvailable " + idAvailable);
 }
 
 function removeID(id) {
@@ -156,17 +169,17 @@ function generate() {
        Then, it concats all of the selected level's question from index into one board in idAvailable */
     var clickedIndex = [];
     var checkID = "";
-    for (var i = 0; i <= 5; i++){
-        checkID = "#check"+i;
+    for (var i = 0; i <= 5; i++) {
+        checkID = "#check" + i;
         if ($(checkID).prop('checked')) {
             clickedIndex.push(i);
         }
     }
-    
-    for (i = 0; i < clickedIndex.length; i++){
+
+    for (i = 0; i < clickedIndex.length; i++) {
         idAvailable.concat(index[clickedIndex[i]]);
     }
-    
+
 }
 
 function choose(array, type) {
@@ -253,18 +266,21 @@ window.onload = function () {
 };
 
 $(document).ready(function () {
-    $("#check0").change(function () {
-        // this will contain a reference to the checkbox   
-        if (this.checked) {
-            goCustom();
-            generate();
-        } else {}
+    $(".checkbox").change(function () {
+        $("#custom").prop("checked", true);
+        generate();
     });
 
-    $("#soft").change(function () {
+
+    $('.funkyradio').find('[type="radio"]').change(function () {
         // this will contain a reference to the radiobox   
         if (this.checked) {
             alert("yeah");
         }
     });
+
+    $('.funkyradio').find('[type="radio"]').each(function () {
+        console.log(this.id);
+    });
+
 });
