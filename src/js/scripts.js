@@ -2,15 +2,16 @@ var DARE_ID = [];
 var TRUTH_ID = [];
 var DARE = "Dare";
 var TRUTH = "Truth";
-var SOURCE = "../script/output.json"; //with both truth and dare
+var SOURCE = "../src/outpput.json"; //with both truth and dare
 var turn = "1";
 var idAvailable = [];
 var index = [[], [], [], [], [], []];
+var inputjson;
 
 /**
- 
-  To update the view
- 
+    ----------------------------------------------------------
+    Update the view
+    ----------------------------------------------------------
 */
 function timer(seconds) {
     'use strict';
@@ -49,13 +50,13 @@ function addLabel(style, name) {
 
 }
 
-function updateLabels(object) {
-    if (object["time"] !== "") {
+function updateLabels(json) {
+    if (json["time"] !== "") {
         addLabel("default", "timer");
         timer(object['time']);
 
     }
-    if (object["turns"] !== "") {
+    if (json["turns"] !== "") {
         addLabel("default", "turns");
     }
 }
@@ -65,7 +66,7 @@ function nextTurn() {
     $("#turn").text(turn);
 }
 
-
+/*
 function updateView(id, type) {
     clearLabel();
     addLabel("info", type);
@@ -86,7 +87,28 @@ function updateView(id, type) {
     });
 
     nextTurn();
+}*/
+
+function updateView(id, type) {
+    clearLabel();
+    addLabel("info", type);
+
+    var item = inputjson[id];
+    console.log(item);
+    if (id >= 0) {
+        $("#type-action").text(item.type + ": ");
+        updateLabels(item);
+
+        $("#text-action").text(item.summary);
+
+    } else {
+        $("#text-action").text("You've completed all the " + type);
+    }
+
+
+    nextTurn();
 }
+
 
 function checkCheckBox(id) {
     var realID = "#" + id;
@@ -96,7 +118,7 @@ function checkCheckBox(id) {
 function matchRadioMode(id) {
     switch (id) {
         case "original":
-             $(".checkbox").prop("checked", true);
+            $(".checkbox").prop("checked", true);
             break;
         case "soft":
             //code block
@@ -110,6 +132,7 @@ function matchRadioMode(id) {
 }
 
 /** 
+    ----------------------------------------------------------
     The JSON file for the truth or dare should be like:
         id - The unique id of the truth or dare
         type - The type is either "Truth" or "Dare"
@@ -117,16 +140,8 @@ function matchRadioMode(id) {
         summary - The explaination of the truth or the dare to do
         time - The time set in seconds for the timer
         turns - The number of turn the dare stays
-
+    ----------------------------------------------------------
 */
-function loadJSON(source) {
-    /* Get the JSON file and do the logic to get a truth or dare from the JSON file based on the choice */
-    $.getJSON(source, function (json) {
-        indexing(json);
-    });
-}
-
-
 function indexing(json) {
     /* To be called when loading the json to index truths and dares IDs */
     var i, item;
@@ -162,24 +177,6 @@ function removeID(id) {
             break;
         }
     }
-}
-
-function generate() {
-    /* The checkbox are in the same order (0 to 5) as the level (0 to 5), so it checks if the checkbox are checked and store it in a array
-       Then, it concats all of the selected level's question from index into one board in idAvailable */
-    var clickedIndex = [];
-    var checkID = "";
-    for (var i = 0; i <= 5; i++) {
-        checkID = "#check" + i;
-        if ($(checkID).prop('checked')) {
-            clickedIndex.push(i);
-        }
-    }
-
-    for (i = 0; i < clickedIndex.length; i++) {
-        idAvailable.concat(index[clickedIndex[i]]);
-    }
-
 }
 
 function choose(array, type) {
@@ -228,41 +225,90 @@ function statGame() {
     ];
 }
 
-
 /**
-    Truth or Dare functions
+    ----------------------------------------------------------
+    Handler
+    ----------------------------------------------------------
 */
-function truth() {
-    /* Load a truth from the json file */
-    "use strict";
-    choose(TRUTH_ID, TRUTH);
+function handleFileSelect(evt) {
+    var files = evt.target.files; // FileList object
+
+    // files is a FileList of File objects. List some properties.
+    var output = [];
+    for (var i = 0, f; f = files[i]; i++) {
+        output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
+            f.size, ' bytes, last modified: ',
+            f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a',
+            '</li>');
+    }
+    $("#list").html("<ul>" + output.join("") + "</ul>");
+
+    getInputfile(files[0]);
 }
 
-function random() {
-    "use strict";
-    choose(idAvailable, "Random");
+function getInputfile(file) {
+    var reader = new FileReader();
+
+    // Closure to capture the file information.
+    reader.onload = (function (theFile) {
+        return function (e) {
+            try {
+                inputjson = JSON.parse(e.target.result);
+                indexing(inputjson);
+            } catch (err) {
+                alert('Error when trying to parse json : ' + err);
+            }
+        }
+    })(file);
+
+    reader.readAsText(file);
 }
 
-function dare() {
-    /* load a dare from tje json file */
-    "use strict";
-    choose(DARE_ID, DARE);
+function generate() {
+    /* The checkbox are in the same order (0 to 5) as the level (0 to 5), so it checks if the checkbox are checked and store it in a array
+       Then, it concats all of the selected level's question from index into one board in idAvailable */
+    var clickedIndex = [];
+    var checkID = "";
+    for (var i = 0; i <= 5; i++) {
+        checkID = "#check" + i;
+        if ($(checkID).prop('checked')) {
+            clickedIndex.push(i);
+        }
+    }
+
+    for (i = 0; i < clickedIndex.length; i++) {
+        idAvailable.concat(index[clickedIndex[i]]);
+    }
+
 }
 
+function loadJSON(source) {
+    /* Get the JSON file and do the logic to get a truth or dare from the JSON file based on the choice */
+    $.getJSON(source, function (json) {
+        indexing(json);
+        inputjson = json;
+    });
+}
 
-/**
-
-    Event handler
-
-*/
 window.onload = function () {
     /* to load the json and do the indexing when the window is loading */
     $.get(SOURCE)
         .done(function () {
             loadJSON(SOURCE);
         }).fail(function () {
-            alert("The file couldn't be loaded");
+            alert("The file at " + SOURCE + " couldn't be loaded. Try uploading it in settings");
+
+            if (window.File && window.FileReader && window.FileList && window.Blob) {
+
+                $("#loadFile").prepend("<input id='files' type='file' name='files[]' multiple />");
+                document.getElementById('files').addEventListener('change', handleFileSelect, false);
+
+            } else {
+                alert('The File APIs are not fully supported in this browser.');
+
+            }
         });
+
 };
 
 $(document).ready(function () {
@@ -270,7 +316,6 @@ $(document).ready(function () {
         $("#custom").prop("checked", true);
         generate();
     });
-
 
     $('.funkyradio').find('[type="radio"]').change(function () {
         // this will contain a reference to the radiobox   
@@ -284,3 +329,27 @@ $(document).ready(function () {
     });
 
 });
+
+
+/**
+    ----------------------------------------------------------
+    Truth or Dare functions
+    ----------------------------------------------------------
+*/
+function truth() {
+    /* Load a truth from the json file */
+    "use strict";
+    choose(TRUTH_ID, TRUTH);
+    console.log(inputjson);
+}
+
+function random() {
+    "use strict";
+    choose(idAvailable, "Random");
+}
+
+function dare() {
+    /* load a dare from tje json file */
+    "use strict";
+    choose(DARE_ID, DARE);
+}
