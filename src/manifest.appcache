@@ -1,18 +1,22 @@
 CACHE MANIFEST
-#Obsolete
+#MDN says it's Obsolete
 #https://developer.mozilla.org/fr/docs/Web/HTML/Utiliser_Application_Cache
 
 CACHE:
 # index.html is cached by default anyway -- this is just to be explicit
 ../src/index.html 
+../src/favicon.ico
+
 ../src/css/bootstrap.min.css
 ../src/css/bootstrap-theme.min.css
 ../src/css/style.css
+
 ../src/js/bootstrap.min.js
 ../src/js/jquery.min.js
 ../src/js/script.js
-../src/favicon.ico
-../script/output.json
+
+#It's best to have file in the same repository
+../src/output.json 
 
 
 # Fallback, so all pages put here will be displayed if the user is offline instead
