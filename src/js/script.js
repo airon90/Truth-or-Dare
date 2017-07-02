@@ -12,6 +12,13 @@
         turns - The number of turn the dare stays
         
 */
+
+/**
+    ----------------------------------------------------------
+                        Variables
+    ----------------------------------------------------------
+*/
+
 var DARE_ID = [];
 var TRUTH_ID = [];
 var DARE = "Dare";
@@ -20,8 +27,8 @@ var SOURCE = "../src/output.json"; //with both truth and dare
 var turn = "1";
 var idAvailable = [];
 var index = [[], [], [], [], [], []];
-var turnPerStage = 10;
-var inputjson, gameType, stage;
+var turnPerStage = 15;
+var inputjson, gameType, stages;
 
 var original = {
     name: "original",
@@ -33,8 +40,12 @@ var original = {
         [0.1, 0.25, 0.4, 0.25],
         [0, 0.1, 0.3, 0.6]
     ], //Associated weight of the level to arrive, chance of each getting selected
-    numberOfStage: 4, //For the number of different weight possibilities. Useful if we want to do a game mode with less stage
-    array: [] //Actual array of possible ids define by this game type and level and the index and available ids
+    stageDare: [
+        ["Every " + turnPerStage + " turns, there will be a <i>sexy</i> special dare for all players"],
+        ["Remove one garment"],
+        ["Stay in your undies"],
+        ["All players must undress"]
+    ]
 };
 var soft = {
     name: "soft",
@@ -45,8 +56,7 @@ var soft = {
         [0.7, 0.3],
         [0.6, 0.4]
     ],
-    numberOfStage: 4,
-    array: []
+    stageDare: []
 };
 var sexy = {
     name: "sexy",
@@ -57,25 +67,23 @@ var sexy = {
         [0.25, 0.5, 0.25],
         [0.1, 0.3, 0.6]
     ],
-    numberOfStage: 4,
-    array: []
+    stageDare: original.stageDare
 };
 var custom = {
     name: "custom",
     levels: [],
     weight: [],
-    numberOfStage: 0,
-    array: []
+    stageDare: []
 };
 
 /**
     ----------------------------------------------------------
-    Update the view
+                        Update the view
     ----------------------------------------------------------
 */
 function timer(seconds) {
     /* Animate the bootstrap progress bar to reach 100% in a time in ms set */
-    'use strict';
+    "use strict";
 
     var milliseconds = seconds * 1000;
 
@@ -93,8 +101,16 @@ timer(10);
 function addAlert(style, title, message) {
     /* Create an alert with a bootStrapType for the style, a title and a message */
 
-    $("#alert-placeholder").html("<div class='alert alert-" + style + "'><button type='button' class='close' data-dismiss='alert'>&times;</button><strong>" + title + "</strong>" + message + "</div>");
+    $("#alert-placeholder").html("<div class='alert alert-" + style + "'><button type='button' class='close' data-dismiss='alert'>&times;</button><strong>" + title + "</strong><br>" + message + "</div>");
 
+}
+
+function addStageAlert(stage) {
+    try {
+        addAlert("danger", "Special dare!", gameType.stageDare[stage]);
+    } catch (err) {
+        //console.log(err);
+    }
 }
 
 function addFileView() {
@@ -108,10 +124,10 @@ function showFilesDetails(files) {
     var output = [];
 
     for (var i = 0, f; f = files[i]; i++) {
-        output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
-            f.size, ' bytes, last modified: ',
-            f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a',
-            '</li>');
+        output.push("<li><strong>", escape(f.name), "</strong> (", f.type || "n/a", ") - ",
+            f.size, " bytes, last modified: ",
+            f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : "n/a",
+            "</li>");
     }
     $("#list").html("<ul>" + output.join("") + "</ul>");
 }
@@ -180,9 +196,9 @@ function updateLabels(object) {
     addLevelLabel(object["level"]);
 }
 
-function updateView(id, type) {
+function updateView(id, type, stage) {
     clearLabel();
-    addLabel("info", type);
+    addLabel("primary", type);
 
     //console.log("selected one " + inputjson[id])
 
@@ -199,6 +215,7 @@ function updateView(id, type) {
     }
 
     $("#turn").text(turn);
+    addStageAlert(stage);
 }
 
 function checkRadioBox(id, check) {
@@ -217,7 +234,7 @@ function setCheckBox(min, max, check) {
 
 /** 
     ----------------------------------------------------------
-    Game logic
+                            Game logic
     ----------------------------------------------------------
 */
 function indexing(json) {
@@ -238,30 +255,31 @@ function indexing(json) {
     }
 
     idAvailable = TRUTH_ID.concat(DARE_ID);
-    console.log(idAvailable);
+    //console.log(idAvailable);
 }
 
-function setStage() {
+function setStages() {
     var v;
-    stage = [];
-    for (var i = 0; i < gameType.numberOfStage; i++) {
+    stages = [];
+    for (var i = 0; i < gameType.weight.length; i++) {
         v = (i + 1) * turnPerStage;
-        stage.push(v);
+        stages.push(v);
     }
-    //console.log(stage);
+    //console.log(stages);
 }
 
 function getStage() {
+    /* Get the stage we're in based on the turn */
     var i = 0;
 
-    while (i < stage.length - 1) {
-        if (stage[i] > turn) {
+    while (i < stages.length - 1) {
+        if (stages[i] > turn) {
             break;
         }
-        i++
+        i++;
     }
-
-    //console.log("stage " + stage[i] + " i " + i);
+    
+    //console.log("stages " + stages[i] + " i " + i);
     return i;
 }
 
@@ -286,6 +304,7 @@ function removeID(id) {
 }
 
 function getPossibilities(array, available) {
+    /* Return the common value of the two arrays */
     var i, item;
     var result = [];
 
@@ -305,6 +324,7 @@ function getPossibilities(array, available) {
 }
 
 function getRandomID(array) {
+    /* Get a random id of the input array and removes it from index and idAvailable */
     var id = -1;
     var randomIndex;
 
@@ -313,29 +333,30 @@ function getRandomID(array) {
         id = array[randomIndex];
         removeID(id);
     }
+    
     //console.log("id " + id);
     return id;
 }
 
 function getFromIndex(level) {
-    var result;
-
-    if (level == 2) {
+    /* The level 0,1 and 2 share the same probability weight, else it's index[level] when called */
+    var result = [];
+    var possibilities = []
+ 
+    console.log(level);
+    
+    if (level === 2) {
         result = index[0].concat(index[1], index[2]);
     } else {
         result = index[level];
     }
-
-    if (result == undefined) {
-        result = idAvailable;
-    }
-
+    
     return result;
 }
 
-function getRandomArray() {
+function getRandomArray(stage) {
     /* The wider the weight the higher the chance to get above the random number, levels are associated with weight in the gameType var */
-    var weights = gameType.weight[getStage()]; //shall be replaced by a getweight depending on gamestage
+    var weights = gameType.weight[stage]; //shall be replaced by a getweight depending on gamestage
     var random = Math.random(),
         sum = 0,
         findex = weights.length - 1;
@@ -355,19 +376,98 @@ function getRandomArray() {
 }
 
 function choose(array, type) {
-    var available = getRandomArray();
+    /* Apply the logic to get a random truth or dare based on the type, the array is the indexed list of truth or dare */
+    var currentStage = getStage();
+    var available = getRandomArray(currentStage);
     var possibilities = getPossibilities(array, available);
-    var randomID = getRandomID(possibilities);
-
+    
+    if (possibilities.length === 0){
+        possibilities = getPossibilities(array, idAvailable);
+    }
+    
     //console.log("rID " + randomID);
     turn++;
-    updateView(randomID, type);
+    updateView(getRandomID(possibilities), type, currentStage);
 }
-
 
 /**
     ----------------------------------------------------------
-    JSON source file Handler
+                        UI Handling
+    ----------------------------------------------------------
+*/
+
+function matchRadioMode(id) {
+    /* Check the Checkbox based on the Checked radio button, modify the game based on the input */
+    var min, max;
+
+    switch (id) {
+        case original.name:
+            min = 0;
+            max = 5;
+            gameType = original;
+            break;
+        case soft.name:
+            min = 0;
+            max = 3;
+            gameType = soft;
+            break;
+        case sexy.name:
+            min = 3;
+            max = 5;
+            gameType = sexy;
+            break;
+        default:
+            gameType = custom;
+            return;
+    }
+
+    setStages(); //To match the stage with the current gameType
+    setCheckBox(0, 5, false);
+    setCheckBox(min, max, true);
+}
+
+function setNewIDAvailable() {
+    /* The checkbox are in the same order (0 to 5) as the level (0 to 5), so it checks if the checkbox are checked and store it in a array
+       Then, it concats all of the selected level's question from index into one board in idAvailable */
+    var clickedIndex = [],
+        i;
+    var checkID = "";
+    custom.levels = [];
+
+    for (i = 0; i <= 5; i++) {
+        checkID = "#check" + i;
+        if ($(checkID).prop("checked")) {
+            clickedIndex.push(i);
+        }
+    }
+
+    custom.levels = clickedIndex;
+
+    for (i = 0; i < clickedIndex.length; i++) {
+        idAvailable.concat(index[clickedIndex[i]]);
+    }
+
+}
+
+$(document).ready(function () {
+    /* Adds listeners when game is ready */
+    $(".checkbox").change(function () {
+        checkRadioBox(custom.name, true); //Go Custom when a checkbox is ticked
+        setNewIDAvailable();
+    });
+
+    $('.funkyradio').find("[type='radio']").change(function () {
+        // "this" will contain a reference to the changed radiobox   
+        if (this.checked) {
+            matchRadioMode(this.id);
+        }
+    });
+
+});
+
+/**
+    ----------------------------------------------------------
+                    JSON source file Handler
     ----------------------------------------------------------
 */
 
@@ -382,15 +482,16 @@ function loadJSONfromfile(file) {
                 inputjson = JSON.parse(e.target.result);
                 indexing(inputjson);
             } catch (err) {
-                alert('Error when trying to parse json : ' + err);
+                alert("Error when trying to parse json : " + err);
             }
-        }
-    })(file);
+        };
+    }(file));
 
     try {
         reader.readAsText(file);
     } catch (err) {
-        console.log(err);
+        /* If you click on cancel while loading an input file it can break */
+        //alert(err);
     }
 
 }
@@ -405,11 +506,12 @@ function handleFileSelect(evt) {
 }
 
 function localfileEnabling() {
+    /* Check if the File API is supported and change the html to load a file in settings*/
     if (window.File && window.FileReader && window.FileList && window.Blob) {
         addFileView();
         $("#files").bind("change", handleFileSelect);
     } else {
-        alert('The File APIs are not fully supported in this browser.');
+        alert("The File APIs are not fully supported in this browser.");
     }
 }
 
@@ -436,80 +538,7 @@ window.onload = function () {
 
 /**
     ----------------------------------------------------------
-    UI Handling
-    ----------------------------------------------------------
-*/
-
-function matchRadioMode(id) {
-    var min, max;
-
-    switch (id) {
-        case original.name:
-            min = 0;
-            max = 5;
-            gameType = original;
-            break;
-        case soft.name:
-            min = 0;
-            max = 3;
-            gameType = soft;
-            break;
-        case sexy.name:
-            min = 3;
-            max = 5;
-            gameType = sexy;
-            break;
-        default:
-            gameType = custom;
-            return;
-    }
-
-    setStage(); //To match the stage with the current gameType
-    setCheckBox(0, 5, false);
-    setCheckBox(min, max, true);
-}
-
-function setNewIDAvailable() {
-    /* The checkbox are in the same order (0 to 5) as the level (0 to 5), so it checks if the checkbox are checked and store it in a array
-       Then, it concats all of the selected level's question from index into one board in idAvailable */
-    var clickedIndex = [];
-    var checkID = "";
-    custom.levels = [];
-
-    for (var i = 0; i <= 5; i++) {
-        checkID = "#check" + i;
-        if ($(checkID).prop('checked')) {
-            clickedIndex.push(i);
-        }
-    }
-
-    custom.levels = clickedIndex;
-
-    for (i = 0; i < clickedIndex.length; i++) {
-        idAvailable.concat(index[clickedIndex[i]]);
-    }
-
-}
-
-$(document).ready(function () {
-    $(".checkbox").change(function () {
-        checkRadioBox(custom.name, true); //Go Custom when a checkbox is ticked
-        setNewIDAvailable();
-    });
-
-    $('.funkyradio').find('[type="radio"]').change(function () {
-        // "this" will contain a reference to the changed radiobox   
-        if (this.checked) {
-            matchRadioMode(this.id);
-        }
-    });
-
-});
-
-
-/**
-    ----------------------------------------------------------
-    Truth or Dare functions
+                    Truth or Dare functions
     ----------------------------------------------------------
 */
 function truth() {
