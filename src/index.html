@@ -88,7 +88,10 @@
                     <div id="rules" class="tab-pane fade">
                         <div class="jumbotron">
                             <h3>Rules</h3>
-                            <p>Some content in menu 1.</p>
+                            <p>A player should <strong>not</strong> hit twice <i>Truth</i> or <i>Dare</i> button.</p>
+                            <p>You can customized the game in the <i>Settings</i> tab for different experiences.</p>
+                            <p>The game experience is set to <i>original</i> by default.</p>
+                            <p>If a player does not accomplish a dare, a set <strong>penalty</strong> will be given.</p>
                         </div>
                     </div>
 
@@ -137,19 +140,27 @@
                                     <div class="funkyradio">
                                         <div class="funkyradio-primary">
                                             <input type="radio" name="radio" id="original" checked=""/>
-                                            <label for="original"><strong>Original</strong> - The best way to play the game</label>
+                                            <label for="original">
+                                                <div class="funkyradio-text"><strong>Original</strong> - The best way to play the game</div>
+                                            </label>
                                         </div>
                                         <div class="funkyradio-info">
                                             <input type="radio" name="radio" id="soft" />
-                                            <label for="soft"><strong>Soft</strong> - To be played with friends </label>
+                                            <label for="soft">
+                                                <div class="funkyradio-text"><strong>Soft</strong> - To be played with friends</div>
+                                            </label>
                                         </div>
                                         <div class="funkyradio-danger">
                                             <input type="radio" name="radio" id="sexy" />
-                                            <label for="sexy"><strong>Sexy</strong> - To get to the interesting part quickly</label>
+                                            <label for="sexy">
+                                                <div class="funkyradio-text"><strong>Sexy</strong> - To get to the interesting part quickly</div>
+                                            </label>
                                         </div>
                                         <div class="funkyradio-default">
                                             <input type="radio" name="radio" id="custom" />
-                                            <label for="custom"><strong>Custom</strong> - Based on your above selection</label>
+                                            <label for="custom">
+                                                <div class="funkyradio-text"><strong>Custom</strong> - Based on your above selection</div>
+                                            </label>
                                         </div>
                                     </div>
                                 </div>
@@ -177,9 +188,9 @@
                         <div class="col-xs-5 col-md-3">
                             <div class="panel panel-default">
                                 <div class="panel-body" id="labels">
-                                    <span class="label label-default">label</span>
-                                    <span class="label label-danger">danger</span>
-                                    <span class="label label-primary">turn</span>
+                                    <span class="label label-primary">Truth</span>
+                                    <span class="label label-default">Or</span>
+                                    <span class="label label-danger">Dare</span>
                                 </div>
                             </div>
 

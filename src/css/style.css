@@ -22,7 +22,16 @@ h4 {
 
 .progress {
     background: rgba(255, 255, 255, 1);
+    /* FF3.6+ */
+    background: -moz-linear-gradient(top, rgba(224, 224, 224, 1) 0%, rgba(255, 255, 255, 1) 100%);
+    /* Chrome,Safari4+ */
+    background: -webkit-gradient(top, rgba(224, 224, 224, 1) 0%, rgba(255, 255, 255, 1) 100%);
+    /* Chrome10+,Safari5.1+ */
     background: -webkit-linear-gradient(top, rgba(224, 224, 224, 1) 0%, rgba(255, 255, 255, 1) 100%);
+    /* Opera 11.10+ */
+    background: -o-linear-gradient(top, rgba(224, 224, 224, 1) 0%, rgba(255, 255, 255, 1) 100%);
+    /* IE10+ */
+    background: -ms-linear-gradient(top, rgba(224, 224, 224, 1) 0%, rgba(255, 255, 255, 1) 100%);
     background: linear-gradient(to bottom, rgba(224, 224, 224, 1) 0%, rgba(255, 255, 255, 1) 100%);
     border: 0px solid rgba(255, 255, 255, 1);
     border-radius: 6px;
@@ -35,8 +44,28 @@ h4 {
 
 .progress-striped .progress-bar-custom {
     background-color: rgba(66, 103, 135, 1);
+    /* FF3.6+ */
+    background-image: -moz-linear-gradient(linear, 0 100%, 100% 0, color-stop(0.25, rgba(255, 255, 255, 0.15), color-stop(0.25, transparent), color-stop(0.5, transparent), color-stop(0.5, rgba(255, 255, 255, 0.15)), color-stop(0.75, rgba(255, 255, 255, 0.15)), color-stop(0.75, transparent), to(transparent)));
+    /* Chrome,Safari4+ */
     background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(0.25, rgba(255, 255, 255, 0.15), color-stop(0.25, transparent), color-stop(0.5, transparent), color-stop(0.5, rgba(255, 255, 255, 0.15)), color-stop(0.75, rgba(255, 255, 255, 0.15)), color-stop(0.75, transparent), to(transparent)));
+    /* Chrome10+,Safari5.1+ */
+    background-image: -webkit-linear-gradient(linear, 0 100%, 100% 0, color-stop(0.25, rgba(255, 255, 255, 0.15), color-stop(0.25, transparent), color-stop(0.5, transparent), color-stop(0.5, rgba(255, 255, 255, 0.15)), color-stop(0.75, rgba(255, 255, 255, 0.15)), color-stop(0.75, transparent), to(transparent)));
+    /* Opera 11.10+ */
+    background-image: -o-linear-gradient(linear, 0 100%, 100% 0, color-stop(0.25, rgba(255, 255, 255, 0.15), color-stop(0.25, transparent), color-stop(0.5, transparent), color-stop(0.5, rgba(255, 255, 255, 0.15)), color-stop(0.75, rgba(255, 255, 255, 0.15)), color-stop(0.75, transparent), to(transparent)));
+    /* IE10+ */
+    background-image: -ms-linear-gradient(linear, 0 100%, 100% 0, color-stop(0.25, rgba(255, 255, 255, 0.15), color-stop(0.25, transparent), color-stop(0.5, transparent), color-stop(0.5, rgba(255, 255, 255, 0.15)), color-stop(0.75, rgba(255, 255, 255, 0.15)), color-stop(0.75, transparent), to(transparent)));
+    /*---------------------------------------*/
+    /* FF3.6+ */
+    background-image: -moz-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+    /* Chrome,Safari4+ */
+    background-image: -webkit-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+    /* Chrome10+,Safari5.1+ */
     background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+    /* Opera 11.10+ */
+    background-image: -o-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+    /* IE10+ */
+    background-image: -ms-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+    /*---------------------------------------*/
     background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
     background-size: 45px 45px;
 }
@@ -96,17 +125,16 @@ h4 {
 
 .btn-random:hover {
     background: rgba(235, 235, 235, 1);
-    background: -webkit-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(235, 235, 235, 1) 100%);
-    background: -moz-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(235, 235, 235, 1) 100%);
     /* FF3.6+ */
-    background: -webkit-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(235, 235, 235, 1) 100%);
+    background: -moz-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(235, 235, 235, 1) 100%);
     /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(235, 235, 235, 1) 100%);
+    background: -webkit-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(235, 235, 235, 1) 100%);
     /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(235, 235, 235, 1) 100%);
+    background: -webkit-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(235, 235, 235, 1) 100%);
     /* Opera 11.10+ */
-    background: -ms-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(235, 235, 235, 1) 100%);
+    background: -o-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(235, 235, 235, 1) 100%);
     /* IE10+ */
+    background: -ms-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(235, 235, 235, 1) 100%);
     background: linear-gradient(to bottom, rgba(255, 255, 255, 1) 0%, rgba(235, 235, 235, 1) 100%);
     border-color: rgba(173, 173, 173, 1);
     color: rgba(77, 76, 76, 1);
@@ -135,10 +163,15 @@ h4 {
 }
 
 .funkyradio label {
+    display: inline-block;
     width: 100%;
     border-radius: 3px;
     border: 1px solid #D1D3D4;
     font-weight: normal;
+}
+.funkyradio-text {
+    margin-left:3.25em;
+    display: inline-block;
 }
 
 .funkyradio input[type="radio"]:empty {
@@ -148,7 +181,6 @@ h4 {
 .funkyradio input[type="radio"]:empty~label {
     position: relative;
     line-height: 30px;
-    text-indent: 3.25em;
     cursor: pointer;
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -159,8 +191,8 @@ h4 {
 .funkyradio input[type="radio"]:empty~label:before {
     position: absolute;
     display: block;
-    top: -1px;
-    bottom: 0;
+    top: 0.5px;
+    bottom: 0.5px;
     left: 0;
     content: '';
     width: 2.5em;
