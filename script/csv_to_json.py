@@ -23,7 +23,7 @@ def main():
 
     conversion(filepath, delim, "output.json")
 
-def conversion(path, delim, filename):
+def conversion(path, delim, json_filename):
     """
     Convert the csv file from path into an output.json
     delim is used to specify the delimiters of the csv file
@@ -38,8 +38,9 @@ def conversion(path, delim, filename):
             fieldnames = next(reader)
             reader = csv.DictReader(csv_file, delimiter=delim, fieldnames=fieldnames)
             for row in reader:
-                csv_input.append(row)
-            to_json(filename, csv_input)
+                if row[fieldnames[0]] != '':
+                    csv_input.append(row)
+            to_json(json_filename, csv_input)
 
     except FileNotFoundError:
         print(path +" was not found")

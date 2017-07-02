@@ -1,14 +1,14 @@
 [{
     "id": "0",
     "level": "2",
-    "summary": "Stand up for 2 turns",
+    "summary": "I dare you to Stand up for 2 turns",
     "time": "",
     "turns": "2",
     "type": "Dare"
 }, {
     "id": "1",
     "level": "2",
-    "summary": "I dare you to do 10 pushups with one hand",
+    "summary": "I dare you to do 10 pushups with one hand in less than a minute",
     "time": "60",
     "turns": "",
     "type": "Dare"
@@ -29,7 +29,7 @@
 }, {
     "id": "4",
     "level": "0",
-    "summary": "What is the most disgusting thing you did",
+    "summary": "What is the most disgusting thing you've ever done?",
     "time": "",
     "turns": "",
     "type": "Truth"
