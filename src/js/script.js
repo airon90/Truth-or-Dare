@@ -1,7 +1,7 @@
 /*!
 
-    Truth Or Dare
-    -------------
+    Truth Or Dare v1.0 - 2017
+    -------------------------
 
     The JSON file for the truth or dare should be like:
         id - The unique id of the truth or dare should be following starting at 0 (depreciated, with indexing function)
@@ -18,13 +18,13 @@
                         Variables
     ----------------------------------------------------------
 */
-
 var DARE_ID = [];
 var TRUTH_ID = [];
 var DARE = "Dare";
 var TRUTH = "Truth";
-var SOURCE = "../src/output.json"; //with both truth and dare
-var turn = "1";
+var SOURCE = "output.json"; //with both truth and dare
+var LOCALHOST = location.protocol + "//" + location.hostname + (location.port ? ':' + location.port : '') + "/src/"; //For when on a webserver
+var turn = 0;
 var idAvailable = [];
 var index = [[], [], [], [], [], []];
 var turnPerStage = 15;
@@ -42,7 +42,7 @@ var original = {
     ], //Associated weight of the level to arrive, chance of each getting selected
     stageDare: [
         ["Every " + turnPerStage + " turns, there will be a <i>sexy</i> special dare for all players"],
-        ["Remove one garment"],
+        ["Withdraw one of your cloth"],
         ["Stay in your undies"],
         ["All players must undress"]
     ]
@@ -98,26 +98,22 @@ function timer(seconds) {
 
 timer(10);
 
-function addAlert(style, title, message) {
-    /* Create an alert with a bootStrapType for the style, a title and a message */
-
-    $("#alert-placeholder").html("<div class='alert alert-" + style + "'><button type='button' class='close' data-dismiss='alert'>&times;</button><strong>" + title + "</strong><br>" + message + "</div>");
-
-}
-
 function addStageAlert(stage) {
-    try {
-        addAlert("danger", "Special dare!", gameType.stageDare[stage]);
-    } catch (err) {
-        //console.log(err);
-    }
+    /* Create a sweet alert with the stage message */
+    swal({
+        title: "<div style='color:#AD4080'><span class='glyphicon glyphicon-fire'></span> Special dare!</div>",
+        text: "<div style='color:#985E80'>" + gameType.stageDare[stage] + "</div>",
+        html: true
+    });
+
 }
 
 function addFileView() {
     /* Make the html to load the file visible in the page */
-    $("#file-placeholder").html("<div class='col-xs-12 col-md-6'></br><div id='loadFile'><output id='list'></output></div></div>");
-    $("#loadFile").prepend("<input id='files' type='file' name='files[]' multiple />");
+    $( "#file-placeholder" ).toggle();
 }
+
+
 
 function showFilesDetails(files) {
     /* List some properties of the uploaded file to show that it has been uploaded */
@@ -200,8 +196,6 @@ function updateView(id, type, stage) {
     clearLabel();
     addLabel("primary", type);
 
-    //console.log("selected one " + inputjson[id])
-
     var item = inputjson[id];
 
     if (id >= 0) {
@@ -215,7 +209,9 @@ function updateView(id, type, stage) {
     }
 
     $("#turn").text(turn);
-    addStageAlert(stage);
+    if (turn - 1 === stages[stage]) {
+        addStageAlert(stage);
+    }
 }
 
 function checkRadioBox(id, check) {
@@ -262,7 +258,7 @@ function setStages() {
     var v;
     stages = [];
     for (var i = 0; i < gameType.weight.length; i++) {
-        v = (i + 1) * turnPerStage;
+        v = i * turnPerStage;
         stages.push(v);
     }
     //console.log(stages);
@@ -273,12 +269,12 @@ function getStage() {
     var i = 0;
 
     while (i < stages.length - 1) {
-        if (stages[i] > turn) {
-            break;
+        if (stages[i] >= turn) {
+            return i;
         }
         i++;
     }
-    
+
     //console.log("stages " + stages[i] + " i " + i);
     return i;
 }
@@ -333,7 +329,7 @@ function getRandomID(array) {
         id = array[randomIndex];
         removeID(id);
     }
-    
+
     //console.log("id " + id);
     return id;
 }
@@ -342,15 +338,15 @@ function getFromIndex(level) {
     /* The level 0,1 and 2 share the same probability weight, else it's index[level] when called */
     var result = [];
     var possibilities = []
- 
-    console.log(level);
-    
+
+    //console.log(level);
+
     if (level === 2) {
         result = index[0].concat(index[1], index[2]);
     } else {
         result = index[level];
     }
-    
+
     return result;
 }
 
@@ -380,11 +376,11 @@ function choose(array, type) {
     var currentStage = getStage();
     var available = getRandomArray(currentStage);
     var possibilities = getPossibilities(array, available);
-    
-    if (possibilities.length === 0){
+
+    if (possibilities.length === 0) {
         possibilities = getPossibilities(array, idAvailable);
     }
-    
+
     //console.log("rID " + randomID);
     turn++;
     updateView(getRandomID(possibilities), type, currentStage);
@@ -482,16 +478,17 @@ function loadJSONfromfile(file) {
                 inputjson = JSON.parse(e.target.result);
                 indexing(inputjson);
             } catch (err) {
-                alert("Error when trying to parse json : " + err);
+                swal("Error", "Error when trying to parse json : " + err, "error")
             }
         };
     }(file));
 
     try {
         reader.readAsText(file);
+        swal("Success!", "File has been successfully loaded", "success")
     } catch (err) {
         /* If you click on cancel while loading an input file it can break */
-        //alert(err);
+        swal("Error", err, "error")
     }
 
 }
@@ -511,8 +508,18 @@ function localfileEnabling() {
         addFileView();
         $("#files").bind("change", handleFileSelect);
     } else {
-        alert("The File APIs are not fully supported in this browser.");
+        swal("No Luck!", "The File APIs are not fully supported in this browser.", "error")
     }
+}
+
+function loadLocalhostJSON(source) {
+    $.get(LOCALHOST + source)
+        .done(function () {
+            loadJSON(LOCALHOST + source);
+        }).fail(function () {
+            swal("Error", "The file at " + LOCALHOST + source + " couldn't be loaded. Try uploading it in settings", "error")
+            localfileEnabling();
+        });
 }
 
 function loadJSON(source) {
@@ -520,20 +527,15 @@ function loadJSON(source) {
     $.getJSON(source, function (json) {
         indexing(json);
         inputjson = json;
+    }).fail(function (d) {
+        loadLocalhostJSON(source);
     });
 }
 
 window.onload = function () {
     /* to load the json and do the indexing when the window is loading */
     matchRadioMode(original.name);
-
-    $.get(SOURCE)
-        .done(function () {
-            loadJSON(SOURCE);
-        }).fail(function () {
-            alert("The file at " + SOURCE + " couldn't be loaded. Try uploading it in settings");
-            localfileEnabling();
-        });
+    loadJSON(SOURCE);
 };
 
 /**
