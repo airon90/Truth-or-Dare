@@ -7,6 +7,11 @@
     padding-right: 30px;
 }
 
+.small-input {
+    width: 50px; height: 25px; 
+    text-align: center;
+}
+
 h4 {
     padding-bottom: 10px;
 }

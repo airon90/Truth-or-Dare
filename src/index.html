@@ -98,10 +98,10 @@
                     <!-- Settings -->
                     <div id="settings" class="tab-pane fade">
                         <div class="jumbotron">
-                            <h3>Settings <span class="glyphicon glyphicon-plus" style='float: right' aria-hidden="true" onclick="addFileView()"></span></h3>
+                            <h3>Settings <button type="button" class="btn btn-xs btn-primary" style='float: right' onclick=""><span class="glyphicon glyphicon-plus" aria-hidden="true" onclick="more()"></span></button></h3>
                             <p>Customize the game here.</p>
-                            <div class="row">
 
+                            <div class="row">
                                 <!-- Level choice CheckBox -->
                                 <div class="col-xs-5 col-md-3">
                                     <h4>Type choices</h4>
@@ -164,10 +164,18 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div id="file-placeholder" style="display: none">
-                                    <div class='col-xs-12 col-md-6'>
-                                        </br>
+                            </div>
+                            </br>
+                            <div class="row">
+                                <div id="settings-placeholder" style="display: none">
+                                    <div class='col-xs-3 col-md-3'>
+                                        <h4>Turns per Stage</h4>
+                                        <input type="number" class="small-input" id="input" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
+                                    </div>
+
+                                    <div class='col-xs-6 col-md-6'>
                                         <div id='loadFile'>
+                                            <h4>Input file</h4>
                                             <input id='files' type='file' name='files[]' multiple />
                                             <output id='list'></output>
                                         </div>
