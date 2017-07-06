@@ -4,6 +4,7 @@
 import csv
 import json
 import sys
+import os
 
 def main():
     """
@@ -56,7 +57,7 @@ def to_json(filename, csv_input):
             filename = "output"
         filename += filename + ".json"
 
-    with open(filename, 'w+') as json_file:
+    with open(os.path.join(os.path.realpath('..'), 'src', filename), 'w+') as json_file:
         json_output = json.dumps(csv_input, sort_keys=True)
         json_file.write(json_output)
 
