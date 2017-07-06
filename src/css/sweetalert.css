@@ -267,7 +267,7 @@ body.stop-scrolling {
 }
 
 .sweet-alert button.cancel:focus {
-    box-shadow: rgba(197, 205, 211, 0.8) 0px 0px 2px, rgba(0, 0, 0, 0.0470588) 0px 0px 0px 1px inset !important;
+    box-shadow: rgba(197, 205, 211, 0.8) 0px 0px 2px, rgba(0, 0, 0, 0.0470588) 0px 0px 0px 1px inset;
 }
 
 .sweet-alert button[disabled] {
@@ -290,7 +290,7 @@ body.stop-scrolling {
 }
 
 .sweet-alert[data-has-cancel-button=false] button {
-    box-shadow: none !important;
+    box-shadow: none;
 }
 
 .sweet-alert[data-has-confirm-button=false][data-has-cancel-button=false] {

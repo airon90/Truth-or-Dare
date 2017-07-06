@@ -18,18 +18,6 @@
                         Variables
     ----------------------------------------------------------
 */
-var DARE_ID = [];
-var TRUTH_ID = [];
-var DARE = "Dare";
-var TRUTH = "Truth";
-var DARE = {
-    name:"Dare",
-    id:[]
-}
-var TRUTH = {
-    name:"Truth",
-    id:[]
-}
 var SOURCE = "output.json"; //with both truth and dare
 var LOCALHOST = location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "") + "/src/"; //For when on a webserver
 var turn = 0;
@@ -38,6 +26,14 @@ var index = [[], [], [], [], [], []];
 var turnPerStage = 15;
 var inputjson, gameType, stages;
 
+var DARE = {
+    name: "Dare",
+    id: []
+};
+var TRUTH = {
+    name: "Truth",
+    id: []
+};
 var original = {
     name: "original",
     levels: [2, 3, 4, 5], //level available for the game, levels 0, 1 and 2 share the same probability
@@ -114,13 +110,9 @@ function addStageAlert(stage) {
 
 }
 
-function addFileView() {
+function addMoreView() {
     /* Make the html to load the file visible in the page */
     $("#settings-placeholder").toggle();
-}
-
-function addTextInputView() {
-    $("#input").show();
     $("#input").val(turnPerStage);
 }
 
@@ -128,7 +120,7 @@ function showFilesDetails(files) {
     /* List some properties of the uploaded file to show that it has been uploaded */
     var output = [];
 
-    for (var i = 0, f; f = files[i]; i++) {
+    for (var i = 0, f = files[i]; i < files.length; i++) {
         output.push("<li><strong>", escape(f.name), "</strong> (", f.type || "n/a", ") - ",
             f.size, " bytes, last modified: ",
             f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : "n/a",
@@ -202,13 +194,14 @@ function updateLabels(object) {
 }
 
 function updateView(id, type, stage) {
-    clearLabel();
-    addLabel("primary", type);
-
+    /* Update the view when clicking on a Truth/Random/Dare button */
     var item = inputjson[id];
 
+    clearLabel();
+    addLabel("primary", type);
+    $("#type-action").text(type + ": ");
+
     if (id >= 0) {
-        $("#type-action").text(item.type + ": ");
         updateLabels(item);
 
         $("#text-action").text(item.summary);
@@ -346,7 +339,7 @@ function getRandomID(array) {
 function getFromIndex(level) {
     /* The level 0,1 and 2 share the same probability weight, else it's index[level] when called */
     var result = [];
-    var possibilities = []
+    var possibilities = [];
 
     //console.log(level);
 
@@ -432,8 +425,9 @@ function matchRadioMode(id) {
 }
 
 function setNewIDAvailable() {
-    /* The checkbox are in the same order (0 to 5) as the level (0 to 5), so it checks if the checkbox are checked and store it in a array
-       Then, it concats all of the selected level's question from index into one board in idAvailable */
+    /* The checkbox are in the same order (0 to 5) as the level (0 to 5), 
+    so it checks if the checkbox are checked and store it in a array
+    Then, it concats all of the selected level's question from index into one board in idAvailable */
     var clickedIndex = [],
         i;
     var checkID = "";
@@ -453,11 +447,27 @@ function setNewIDAvailable() {
     }
 }
 
-function more() {
-    addTextInputView();
-    localfileEnabling();
+function truth() {
+    /* Choose a truth in the available id */
+    "use strict";
+    choose(TRUTH);
 }
 
+function dare() {
+    /* choose a dare in the available id */
+    "use strict";
+    choose(DARE);
+}
+
+function random() {
+    /* Choose a truth or a Dare randomly*/
+    "use strict";
+    if (Math.round(Math.random())) {
+        truth();
+    } else {
+        dare();
+    }
+}
 
 $(document).ready(function () {
     /* Adds listeners when game is ready */
@@ -475,7 +485,7 @@ $(document).ready(function () {
     $("input[type='number']").change(function () {
         turnPerStage = parseInt($("#input").val());
         setStages();
-        
+
     });
 
 });
@@ -509,9 +519,7 @@ function loadJSONfromfile(file) {
         /* If you click on cancel while loading an input file it can break */
         swal("Error", err, "error");
     }
-
 }
-
 
 function handleFileSelect(evt) {
     /* The first file loaded is considered as the .json file in case of multiple input,  */
@@ -524,30 +532,29 @@ function handleFileSelect(evt) {
 function localfileEnabling() {
     /* Check if the File API is supported and change the html to load a file in settings*/
     if (window.File && window.FileReader && window.FileList && window.Blob) {
-        addFileView();
+        addMoreView();
         $("#files").bind("change", handleFileSelect);
     } else {
         swal("No Luck!", "The File APIs are not fully supported in this browser.", "error");
     }
 }
 
-function loadJSON(source) {
-    /* Get the local JSON file and index and store it in inputjson */
+function getJSON(source) {
     $.getJSON(source, function (json) {
         indexing(json);
         inputjson = json;
-    }).fail(function (d) {
-        loadLocalhostJSON(source);
+    }).fail(function () {
+        swal("Error", "The file at " + source + " couldn't be loaded. Try uploading it in settings", "error");
+        localfileEnabling();
     });
 }
 
-function loadLocalhostJSON(source) {
-    $.get(LOCALHOST + source)
+function loadJSON(source) {
+    $.get(source)
         .done(function () {
-            loadJSON(LOCALHOST + source);
+            getJSON(source);
         }).fail(function () {
-            swal("Error", "The file at " + LOCALHOST + source + " couldn't be loaded. Try uploading it in settings", "error");
-            localfileEnabling();
+            getJSON(LOCALHOST + source);
         });
 }
 
@@ -557,30 +564,3 @@ window.onload = function () {
     matchRadioMode(original.name);
     loadJSON(SOURCE);
 };
-
-/**
-    ----------------------------------------------------------
-                    Truth or Dare functions
-    ----------------------------------------------------------
-*/
-function truth() {
-    /* Choose a truth in the available id */
-    "use strict";
-    choose(TRUTH);
-}
-
-function dare() {
-    /* choose a dare in the available id */
-    "use strict";
-    choose(DARE);
-}
-
-function random() {
-    /* Choose a truth or a Dare randomly*/
-    "use strict";
-    if (Math.round(Math.random())) {
-        truth();
-    } else {
-        dare();
-    }
-}

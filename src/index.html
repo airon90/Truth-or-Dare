@@ -98,12 +98,15 @@
                     <!-- Settings -->
                     <div id="settings" class="tab-pane fade">
                         <div class="jumbotron">
-                            <h3>Settings <button type="button" class="btn btn-xs btn-primary" style='float: right' onclick=""><span class="glyphicon glyphicon-plus" aria-hidden="true" onclick="more()"></span></button></h3>
+                            <div style='display: inlineblock'>
+                                <h3>Settings </h3>
+                                <button type="button" class="btn btn-xs btn-primary" style='float: right' onclick="localfileEnabling()">more <span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                            </div>
                             <p>Customize the game here.</p>
 
                             <div class="row">
                                 <!-- Level choice CheckBox -->
-                                <div class="col-xs-5 col-md-3">
+                                <div class="col-xs-7 col-md-3">
                                     <h4>Type choices</h4>
 
                                     <div class="checkbox checkbox-success">
@@ -134,7 +137,7 @@
 
 
                                 <!-- Game type RadioBox -->
-                                <div class="col-xs-9 col-md-5">
+                                <div class="col-xs-12 col-md-5">
                                     <h4>Game Experience</h4>
 
                                     <div class="funkyradio">
