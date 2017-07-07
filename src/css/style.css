@@ -16,6 +16,11 @@ h4 {
     padding-bottom: 10px;
 }
 
+.more {
+    float:right;
+    display: inline-block;
+}
+
 .badge-warning {
     background-color: #f0ad4e
 }

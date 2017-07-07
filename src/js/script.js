@@ -19,6 +19,8 @@
     ----------------------------------------------------------
 */
 var SOURCE = "output.json"; //with both truth and dare
+//var PATH = location.pathname.substring(0, location.pathname.lastIndexOf('/') + 1); //Local path to the file
+var PATH = "";
 var LOCALHOST = location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "") + "/src/"; //For when on a webserver
 var turn = 0;
 var idAvailable = [];
@@ -102,11 +104,13 @@ function timer(seconds) {
 
 function addStageAlert(stage) {
     /* Create a sweet alert with the stage message */
-    swal({
-        title: "<div style='color:#AD4080'><span class='glyphicon glyphicon-fire'></span> Special dare!</div>",
-        text: "<div style='color:#985E80'>" + gameType.stageDare[stage] + "</div>",
-        html: true
-    });
+    if (gameType.stageDare[stage] !== []) {
+        swal({
+            title: "<div style='color:#AD4080'><span class='glyphicon glyphicon-fire'></span> Special dare!</div>",
+            text: "<div style='color:#985E80'>" + gameType.stageDare[stage] + "</div>",
+            html: true
+        });
+    }
 
 }
 
@@ -214,6 +218,8 @@ function updateView(id, type, stage) {
     if (turn - 1 === stages[stage]) {
         addStageAlert(stage);
     }
+    
+    $("#alert-placeholder").hide();
 }
 
 function checkRadioBox(id, check) {
@@ -253,7 +259,6 @@ function indexing(json) {
     }
 
     idAvailable = TRUTH.id.concat(DARE.id);
-    //console.log(idAvailable);
 }
 
 function setStages() {
@@ -263,7 +268,6 @@ function setStages() {
         v = i * turnPerStage;
         stages.push(v);
     }
-    //console.log(stages);
 }
 
 function getStage() {
@@ -277,7 +281,6 @@ function getStage() {
         i++;
     }
 
-    //console.log("stages " + stages[i] + " i " + i);
     return i;
 }
 
@@ -306,8 +309,6 @@ function getPossibilities(array, available) {
     var i, item;
     var result = [];
 
-    //console.log("index " + index + " av " + idAvailable);
-
     for (i = 0; i < array.length; i++) {
         item = array[i];
         for (var j = 0; j < available.length; j++) {
@@ -317,7 +318,6 @@ function getPossibilities(array, available) {
         }
     }
 
-    //console.log("choice possible " + result);
     return result;
 }
 
@@ -332,7 +332,6 @@ function getRandomID(array) {
         removeID(id);
     }
 
-    //console.log("id " + id);
     return id;
 }
 
@@ -340,8 +339,6 @@ function getFromIndex(level) {
     /* The level 0,1 and 2 share the same probability weight, else it's index[level] when called */
     var result = [];
     var possibilities = [];
-
-    //console.log(level);
 
     if (level === 2) {
         result = index[0].concat(index[1], index[2]);
@@ -354,7 +351,7 @@ function getFromIndex(level) {
 
 function getRandomArray(stage) {
     /* The wider the weight the higher the chance to get above the random number, levels are associated with weight in the gameType var */
-    var weights = gameType.weight[stage]; //shall be replaced by a getweight depending on gamestage
+    var weights = gameType.weight[stage];
     var random = Math.random(),
         sum = 0,
         findex = weights.length - 1;
@@ -367,7 +364,6 @@ function getRandomArray(stage) {
         }
     }
 
-    //console.log("Index " + findex + " level " + gameType.levels[findex]);
 
     return getFromIndex(gameType.levels[findex]);
 
@@ -383,7 +379,6 @@ function choose(tod) {
         possibilities = getPossibilities(tod.id, idAvailable);
     }
 
-    //console.log("rID " + randomID);
     turn++;
     updateView(getRandomID(possibilities), tod.name, currentStage);
 }
@@ -550,11 +545,11 @@ function getJSON(source) {
 }
 
 function loadJSON(source) {
-    $.get(source)
+    $.get(LOCALHOST + source)
         .done(function () {
-            getJSON(source);
-        }).fail(function () {
             getJSON(LOCALHOST + source);
+        }).fail(function () {
+            getJSON(PATH + source);
         });
 }
 
