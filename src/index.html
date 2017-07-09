@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!-- <html lang="en" manifest="manifest.appcache"> -->
 <html>
 
 <head>
@@ -58,28 +57,23 @@
                     <!-- Game -->
                     <div id="game" class="tab-pane fade in active">
                         <div class="jumbotron">
-                            <h2>
-                                Are you ready?
-                            </h2>
+                            <h2>Are you ready?</h2>
                             </br>
                             <div>
                                 <p id="type-action">
-                                    <p id="text-action">
-                                        Click on the button below to start the game
-                                    </p>
+                                    <p id="text-action">Click on the button below to start the game</p>
                                 </p>
                             </div>
                             </br>
-                            <div class="col-md-12">
 
-                                <!-- Buttons -->
-                                <div class="row">
+                            <!-- Buttons -->
+                            <div class="row">
+                                <div class="col-md-12">
                                     <button type="button" class="btn btn-truth" onclick="truth()"><span class="glyphicon glyphicon-comment"> </span> Truth</button>
                                     <button type="button" class="btn btn-random" onclick="random()"><span class="glyphicon glyphicon-refresh"></span> Random</button>
                                     <button type="button" class="btn btn-dare" onclick="dare()"><span class="glyphicon glyphicon-fire"></span> Dare</button>
                                 </div>
                             </div>
-
                         </div>
                     </div>
 
@@ -87,10 +81,10 @@
                     <div id="rules" class="tab-pane fade">
                         <div class="jumbotron">
                             <h3>Rules</h3>
-                            <p>A player should <strong>not</strong> hit twice <i>Truth</i> or <i>Dare</i> button.</p>
+                            <p>A player should <i>not</i> hit twice <i>Truth</i> or <i>Dare</i> button.</p>
                             <p>You can customized the game in the <i>Settings</i> tab for different experiences.</p>
                             <p>The game experience is set to <i>original</i> by default.</p>
-                            <p>If a player does not accomplish a dare, a set <strong>penalty</strong> will be given.</p>
+                            <p>If a player does not accomplish a dare, a set <i>penalty</i> will be given.</p>
                         </div>
                     </div>
 
@@ -104,6 +98,7 @@
                             <p>Customize the game here.</p>
 
                             <div class="row">
+                                
                                 <!-- Level choice CheckBox -->
                                 <div class="col-xs-7 col-md-3">
                                     <h4>Type choices</h4>
@@ -168,7 +163,10 @@
                                 </div>
                             </div>
                             </br>
+
+                            <!-- More + -->
                             <div class="row">
+                                
                                 <div id="settings-placeholder" style="display: none">
                                     <div class='col-xs-3 col-md-3'>
                                         <h4>Turns per Stage</h4>
@@ -184,6 +182,7 @@
                                     </div>
                                 </div>
                             </div>
+                        
                         </div>
                     </div>
 
@@ -225,5 +224,4 @@
                         </div>
                     </div>
 </body>
-
 </html>

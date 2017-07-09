@@ -4,27 +4,28 @@ It's the classic game with a more *adult* twist. It can be customized in setting
 
 ### How to Play
 
-1. Download the file here
+1. Download the file [here](https://github.com/Sylhare/Truth_Or_Dare/archive/master.zip)
 2. Unzip the file
 3. Prepare your question using the `input.csv` template
 
-#### Automatic
+##### 4. Automatic
 
-4. Go into script and click on `installAndStart.bat` to launch the app automatically in Windows.
+1. Go into script and click on `installAndStart.bat` to launch the app automatically in Windows.
 
-#### Manual
+##### 4. Manual
 
-4. Use the `csv_to_json` python script to transform the file into `output.json`
-5. Click on the `Index.html` 
+1. Use the `csv_to_json` python script to transform the file into `output.json`
+2. Click on the `Index.html` 
 	- Use in your browser (try Firefox or use the tweak for [Chrome](https://github.com/Sylhare/Truth_Or_Dare/issues/1#issuecomment-313559405))
 	- In a webserver setting the local to the `src` directory
 	- If you have trouble with loading the file, you can load the json file directly into the settings tab (when clicking on the `[more +]` button in settings).
-6. Play the game! (click on truth or dare buttons)
+3. Play the game! (click on truth or dare buttons)
 
 ### Create your questions
 
 You have a template with the `input.csv` file (it can opened with a spreadsheet software like excel or on Google Docs).
 
+- The *id* column to identify each dare with a unique number (optional).
 - The *level* column is here to classify the truth or dare:
 	- 0. Disgusting
 	- 1. Stupid
