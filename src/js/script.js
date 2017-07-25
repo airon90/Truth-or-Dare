@@ -87,6 +87,18 @@ var custom = {
                         Update the view
     ----------------------------------------------------------
 */
+
+function playSound(ms){
+    /* play the "buzzer sound twice */
+    var buzzer = $("#buzzer")[0];
+
+    setTimeout(function () {
+        buzzer.currentTime = 0;
+        buzzer.play();
+    }, ms);
+
+}
+
 function timer(seconds) {
     /* Animate the bootstrap progress bar to reach 100% in a time in ms set */
     "use strict";
@@ -100,6 +112,9 @@ function timer(seconds) {
     $(".progress-bar").animate({
         width: "100%"
     }, milliseconds);
+    
+    playSound(milliseconds);
+
 }
 
 function addStageAlert(stage) {
@@ -218,7 +233,7 @@ function updateView(id, type, stage) {
     if (turn - 1 === stages[stage]) {
         addStageAlert(stage);
     }
-    
+
     $("#alert-placeholder").hide();
 }
 
@@ -241,6 +256,7 @@ function setCheckBox(min, max, check) {
                             Game logic
     ----------------------------------------------------------
 */
+
 function indexing(json) {
     /* To be called when loading the json to index truths and dares IDs */
     var i, item;
@@ -555,7 +571,7 @@ function loadJSON(source) {
 
 window.onload = function () {
     /* to load the json and do the indexing when the window is loading */
-    timer(10);
+    timer(1);
     matchRadioMode(original.name);
     loadJSON(SOURCE);
 };
