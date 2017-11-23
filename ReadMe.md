@@ -13,9 +13,11 @@ It can be played on desktop and phones through [firefox](https://support.mozilla
 3. Prepare your question using the `input.csv` template
 4. Start the game
 
-    - **Automatic**: Go into script and click on `installAndStart.bat` to launch the app automatically in Windows.
+    - **Automatic**: 
+      - Go into script and click on `installAndStart.bat` to launch the app automatically in Windows.
 
-    - **Manual**: Use the `csv_to_json` python script to transform the file into `output.json`
+    - **Manual**: 
+      - Use the `csv_to_json` python script to transform the file into `output.json`
       - Click on the `Index.html` to use in your browser (We recommend Firefox or [Chrome](https://github.com/Sylhare/Truth_Or_Dare/issues/1#issuecomment-313559405))
       - Or in a webserver setting the local to the `src` directory.
 
