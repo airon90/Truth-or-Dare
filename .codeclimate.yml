@@ -1,0 +1,8 @@
+## other configuration excluded from example...
+exclude_paths:
+- "src/css/bootstrap*"
+- "src/css/sweetalert.min.css"
+- "src/js/bootstrap.min.js"
+- "src/js/jquery.min.js"
+- "src/js/sweetalert.min.js"
+- "src/fonts/**"
