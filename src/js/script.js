@@ -21,7 +21,7 @@
 var SOURCE = "output.json"; //with both truth and dare
 //var PATH = location.pathname.substring(0, location.pathname.lastIndexOf('/') + 1); //Local path to the file
 var PATH = "";
-var LOCALHOST = location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : ""); //For when on a webserver
+var LOCALHOST = location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : "") + "/src/"; //For when on a webserver
 var turn = 0;
 var idAvailable = [];
 var index = [[], [], [], [], [], []];
