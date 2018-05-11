@@ -7,7 +7,7 @@
         id - The unique id of the truth or dare should be following starting at 0 (depreciated, with indexing function)
         type - The type is either "Truth" or "Dare"
         level - From 0 to 5, 0 - disgusting, 1 - stupid, 2 - normal, 3 - soft, 4 - sexy, 5 - hot
-        summary - The explaination of the truth or the dare to do
+        summary - The explanation of the truth or the dare to do
         time - The time set in seconds for the timer
         turns - The number of turn the dare stays
         
@@ -88,7 +88,7 @@ var custom = {
     ----------------------------------------------------------
 */
 
-function playSound(ms){
+function playSound(ms) {
     /* play the "buzzer sound twice */
     var buzzer = $("#buzzer")[0];
 
@@ -112,7 +112,7 @@ function timer(seconds) {
     $(".progress-bar").animate({
         width: "100%"
     }, milliseconds);
-    
+
     playSound(milliseconds);
 
 }
@@ -198,7 +198,7 @@ function addLevelLabel(level) {
 }
 
 function updateLabels(object) {
-    /* Upadte label based on the value of the object, a json[id] */
+    /* Update label based on the value of the object, a json[id] */
 
     if (object["time"] !== "") {
         addLabel("default", "timer");
@@ -305,7 +305,7 @@ function removeID(id) {
     var i;
     var findex = idAvailable.indexOf(id);
 
-    //Remove the id from the availables
+    //Remove the id from the available
     if (findex > -1) {
         idAvailable.splice(findex, 1);
     }
@@ -354,7 +354,6 @@ function getRandomID(array) {
 function getFromIndex(level) {
     /* The level 0,1 and 2 share the same probability weight, else it's index[level] when called */
     var result = [];
-    var possibilities = [];
 
     if (level === 2) {
         result = index[0].concat(index[1], index[2]);
@@ -471,7 +470,7 @@ function dare() {
 }
 
 function random() {
-    /* Choose a truth or a Dare randomly*/
+    /* Choose a truth or a Dare randomly */
     "use strict";
     if (Math.round(Math.random())) {
         truth();
