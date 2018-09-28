@@ -8,7 +8,7 @@ It can be played on desktop and phones through [firefox](https://support.mozilla
 
 ### How to Play
 
-1. Download the file [here](https://github.com/Sylhare/Truth_Or_Dare/archive/master.zip)
+1. Download the game [here](https://github.com/Sylhare/Truth_Or_Dare/archive/master.zip)
 2. Unzip the file
 3. Prepare your question using the `input.csv` template
 4. Start the game
