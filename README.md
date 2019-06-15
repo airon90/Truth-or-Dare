@@ -9,7 +9,9 @@ It's the classic game with an *adult* twist. It can be customized in settings fo
 
 It can be played on desktop and phones through [firefox](https://support.mozilla.org/en-US/products/firefox/install-and-update-firefox) with a [webserver](https://github.com/Sylhare/Truth-or-Dare#Sources) or [online](https://sylhare.github.io/Truth-or-Dare).
 
-![Screenshot](https://raw.githubusercontent.com/sylhare/Truth-or-Dare/master/truth-or-dare.png)
+<p align="center">
+  <img src="https://raw.githubusercontent.com/sylhare/Truth-or-Dare/master/truth-or-dare.png" alt="Screenshot" width="500">
+</p>
 
 ### How to Play
 
