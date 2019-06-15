@@ -1,10 +1,15 @@
-# Truth Or Dare [![Codacy Badge](https://api.codacy.com/project/badge/Grade/e8ac2cb68fda49cfa96d15604c108ef5)](https://www.codacy.com/app/Sylhare/Truth_Or_Dare?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Sylhare/Truth_Or_Dare&amp;utm_campaign=Badge_Grade) [![AUR](https://img.shields.io/aur/license/yaourt.svg)](https://github.com/Sylhare/Truth-or-Dare/blob/master/LICENSE)
+# Truth Or Dare 
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/e8ac2cb68fda49cfa96d15604c108ef5)](https://www.codacy.com/app/Sylhare/Truth_Or_Dare?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Sylhare/Truth_Or_Dare&amp;utm_campaign=Badge_Grade) 
+[![License](https://img.shields.io/github/license/sylhare/Truth-or-Dare.svg)](https://github.com/sylhare/Truth-or-Dare/blob/master/LICENSE)
 
 ### Introduction
 
 It's the classic game with an *adult* twist. It can be customized in settings for different type of game (with a softer version). 
 
 It can be played on desktop and phones through [firefox](https://support.mozilla.org/en-US/products/firefox/install-and-update-firefox) with a [webserver](https://github.com/Sylhare/Truth-or-Dare#Sources) or [online](https://sylhare.github.io/Truth-or-Dare).
+
+![Screenshot](https://raw.githubusercontent.com/sylhare/Truth-or-Dare/master/truth-or-dare.png)
 
 ### How to Play
 
