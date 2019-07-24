@@ -15,7 +15,7 @@ def main():
 
     """
     filepath = "input.csv"
-    delim = ";"
+    delim = ","
 
     if len(sys.argv) > 1:
         filepath = sys.argv[1]
