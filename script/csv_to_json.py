@@ -15,12 +15,12 @@ def main():
 
     """
     filepath = "input.csv"
-    delim = ";"
+    delim = ","
 
     if len(sys.argv) > 1:
         filepath = sys.argv[1]
         if len(sys.argv) > 2:
-            delim = ";"
+            delim = ","
 
     conversion(filepath, delim, "output.json")
 
